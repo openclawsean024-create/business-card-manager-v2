@@ -11,6 +11,18 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root { --primary: #0071e3; --primary-dark: #0063c9; --accent: #34c759; --danger: #ff3b30; --text: #1d1d1f; --text2: #86868b; --bg: #f5f5f7; --card: #fff; --border: #d2d2d7; }
         body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+        /* Smooth transitions globally */
+        *, *::before, *::after { transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text2); }
+
+        /* Focus visible */
+        :focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; border-radius: 4px; }
         
         .login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
         .login-screen.hidden { display: none; }
@@ -104,8 +116,73 @@
         .empty { text-align: center; padding: 60px 20px; color: var(--text2); }
         .empty div:first-child { font-size: 50px; margin-bottom: 16px; }
         
-        .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(100px); background: #333; color: #fff; padding: 14px 24px; border-radius: 10px; font-size: 14px; opacity: 0; transition: all 0.3s; z-index: 300; }
+        .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(120px); background: #1d1d1f; color: #fff; padding: 14px 24px; border-radius: 12px; font-size: 14px; opacity: 0; transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); z-index: 300; box-shadow: 0 8px 32px rgba(0,0,0,0.2); pointer-events: none; }
         .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        /* Card hover lift effect */
+        .card-item { transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease; cursor: default; }
+        .card-item:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.12); }
+
+        /* Card avatar initials */
+        .card-avatar { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; color: #fff; flex-shrink: 0; margin-right: 14px; }
+        .card-header-row { display: flex; align-items: center; }
+        .card-header-info { flex: 1; min-width: 0; }
+        .card-name { font-size: 18px; font-weight: 700; }
+        .card-title { font-size: 13px; color: var(--primary); margin-top: 2px; }
+        .card-company { font-size: 14px; color: var(--text2); margin-top: 4px; }
+
+        /* Category badge */
+        .card-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; margin-top: 8px; }
+        .badge-client { background: rgba(0,113,227,0.1); color: var(--primary); }
+        .badge-supplier { background: rgba(52,199,89,0.1); color: var(--accent); }
+        .badge-colleague { background: rgba(255,149,0,0.1); color: #ff9500; }
+        .badge-prospect { background: rgba(175,82,222,0.1); color: #af52de; }
+        .badge-other { background: var(--bg); color: var(--text2); }
+
+        /* Button press effect */
+        .btn:active, .card-actions button:active { transform: scale(0.96); }
+
+        /* Skeleton loading */
+        .skeleton-card { background: var(--card); border-radius: 16px; padding: 20px; animation: shimmer 1.5s infinite; }
+        .skeleton-line { height: 14px; border-radius: 6px; background: linear-gradient(90deg, var(--bg) 25%, #e8e8ed 50%, var(--bg) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+        .skeleton-line.w-50 { width: 50%; }
+        .skeleton-line.w-70 { width: 70%; }
+        .skeleton-line.w-40 { width: 40%; }
+        .skeleton-line.mt-8 { margin-top: 8px; }
+        .skeleton-line.mt-12 { margin-top: 12px; }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+        /* Modal scale-in animation */
+        .modal-content { animation: modalIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        @keyframes modalIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+
+        /* Stats card pulse on update */
+        .stat-card.updated { animation: statPulse 0.5s ease; }
+        @keyframes statPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+        /* Card entrance animation */
+        .cards-grid .card-item { animation: cardIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+        @keyframes cardIn { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+        /* Scan overlay corner brackets */
+        .scan-overlay::before, .scan-overlay::after,
+        .scan-overlay .corner-tl, .scan-overlay .corner-tr,
+        .scan-overlay .corner-bl, .scan-overlay .corner-br {
+          content: ''; position: absolute; width: 24px; height: 24px; border-color: var(--accent); border-style: solid; border-width: 0;
+        }
+        .scan-overlay .corner-tl { top: -2px; left: -2px; border-top-width: 3px; border-left-width: 3px; border-top-left-radius: 12px; }
+        .scan-overlay .corner-tr { top: -2px; right: -2px; border-top-width: 3px; border-right-width: 3px; border-top-right-radius: 12px; }
+        .scan-overlay .corner-bl { bottom: -2px; left: -2px; border-bottom-width: 3px; border-left-width: 3px; border-bottom-left-radius: 12px; }
+        .scan-overlay .corner-br { bottom: -2px; right: -2px; border-bottom-width: 3px; border-right-width: 3px; border-bottom-right-radius: 12px; }
+
+        /* Mobile responsive */
+        @media (max-width: 480px) {
+          .cards-grid { grid-template-columns: 1fr; }
+          .form-row { grid-template-columns: 1fr; }
+          .stats { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+          .stat-card .num { font-size: 20px; }
+          .header h1 { font-size: 18px; }
+        }
     </style>
 </head>
 <body>
@@ -260,7 +337,10 @@
         function updateStats(){document.getElementById('totalCount').textContent=cards.length;document.getElementById('companyCount').textContent=[...new Set(cards.map(c=>c.company).filter(c=>c))].length;document.getElementById('thisMonth').textContent=cards.filter(c=>c.createdAt&&new Date(c.createdAt).getMonth()===new Date().getMonth()&&new Date(c.createdAt).getFullYear()===new Date().getFullYear()).length;}
         
         function escapeHtml(text){return String(text||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');}
-        function renderCards(f=''){const grid=document.getElementById('cardsGrid');const q=(f||'').toLowerCase();const filtered=cards.filter(c=>!q||(c.name||'').toLowerCase().includes(q)||(c.company||'').toLowerCase().includes(q)||(c.title||'').toLowerCase().includes(q)||(c.email||'').toLowerCase().includes(q));if(filtered.length===0){grid.innerHTML='<div class="empty"><div>📇</div><p>'+(q?'找不到符合的名片':'尚未建立名片')+'</p></div>';return;}grid.innerHTML=filtered.map(c=>'<div class="card-item"><div class="card-name">'+escapeHtml(c.name||'未命名')+'</div><div class="card-title">'+escapeHtml(c.title||'')+'</div><div class="card-company">'+escapeHtml(c.company||'')+'</div><div class="card-info">'+(c.phone?'<div><span>電話</span>'+escapeHtml(c.phone)+'</div>':'')+(c.email?'<div><span>Email</span>'+escapeHtml(c.email)+'</div>':'')+(c.line?'<div><span>LINE</span>'+escapeHtml(c.line)+'</div>':'')+'</div><div class="card-actions"><button class="btn-edit" onclick="editCard(\''+c.id+'\')">編輯</button><button class="btn-edit" onclick="showShareModal(\''+c.id+'\')">分享</button><button class="btn-delete" onclick="deleteCard(\''+c.id+'\')">刪除</button></div></div>').join('');}
+        function getAvatarColor(name){const colors=['#0071e3','#34c759','#ff9500','#af52de','#ff3b30','#5ac8fa','#ffcc00'];let hash=0;for(let i=0;i<(name||'').length;i++)hash=name.charCodeAt(i)+((hash<<5)-hash);return colors[Math.abs(hash)%colors.length];}
+        function getInitials(name){return (name||'未知').split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();}
+        function getBadgeClass(category){return{客戶:'badge-client',供應商:'badge-supplier',同事:'badge-colleague',潛在客戶:'badge-prospect',其他:'badge-other'}[category]||'badge-other';}
+        function renderCards(f=''){const grid=document.getElementById('cardsGrid');const q=(f||'').toLowerCase();const filtered=cards.filter(c=>!q||(c.name||'').toLowerCase().includes(q)||(c.company||'').toLowerCase().includes(q)||(c.title||'').toLowerCase().includes(q)||(c.email||'').toLowerCase().includes(q));if(filtered.length===0){grid.innerHTML='<div class="empty"><div>📇</div><p>'+(q?'找不到符合的名片':'尚未建立名片')+'</p></div>';return;}grid.innerHTML=filtered.map((c,i)=>'<div class="card-item" style="animation-delay:'+(i*60)+'ms"><div class="card-header-row"><div class="card-avatar" style="background:'+getAvatarColor(c.name)+'">'+getInitials(c.name)+'</div><div class="card-header-info"><div class="card-name">'+escapeHtml(c.name||'未命名')+'</div><div class="card-title">'+escapeHtml(c.title||'')+'</div><div class="card-company">'+escapeHtml(c.company||'')+'</div></div></div><div><span class="card-badge '+getBadgeClass(c.category)+'">'+escapeHtml(c.category||'其他')+'</span></div><div class="card-info">'+(c.phone?'<div><span>電話</span>'+escapeHtml(c.phone)+'</div>':'')+(c.email?'<div><span>Email</span>'+escapeHtml(c.email)+'</div>':'')+(c.line?'<div><span>LINE</span>'+escapeHtml(c.line)+'</div>':'')+'</div><div class="card-actions"><button class="btn-edit" onclick="editCard(\''+c.id+'\')">編輯</button><button class="btn-edit" onclick="showShareModal(\''+c.id+'\')">分享</button><button class="btn-delete" onclick="deleteCard(\''+c.id+'\')">刪除</button></div></div>').join('');}
         
         function filterCards(){renderCards(document.getElementById('searchInput').value);}
         
