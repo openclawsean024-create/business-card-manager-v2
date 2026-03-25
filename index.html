@@ -265,6 +265,10 @@
                 <button class="btn btn-scan" onclick="startScanFromModal()" style="flex:1;">📷 拍照掃描</button>
                 <button class="btn" onclick="document.getElementById('fileUpload').click()" style="flex:1;background:var(--accent);color:#fff;">📁 上傳圖片</button>
             </div>
+            <div id="imagePreviewContainer" style="display:none;margin-top:12px;text-align:center;">
+                <img id="imagePreview" style="max-width:100%;max-height:150px;border-radius:10px;border:2px solid var(--border);" />
+                <button onclick="clearCardImage()" style="margin-top:6px;padding:4px 12px;background:var(--danger);color:#fff;border:none;border-radius:6px;font-size:12px;cursor:pointer;">✕ 移除圖片</button>
+            </div>
             <input type="file" id="fileUpload" accept="image/*" style="display:none;" onchange="handleFileUpload(event)">
             <div class="modal-actions"><button class="btn-cancel" onclick="closeModal()">取消</button><button class="btn-save" onclick="saveCard()">儲存名片</button></div>
         </div>
@@ -320,7 +324,7 @@
     </div>
     
     <script>
-        let currentUser = null, cards = [], editingId = null, videoStream = null;
+        let currentUser = null, cards = [], editingId = null, videoStream = null, currentCardImage = null;
         
         function getUsers() { return JSON.parse(localStorage.getItem('cardUsers')) || {}; }
         function saveUsers(users) { localStorage.setItem('cardUsers', JSON.stringify(users)); }
@@ -344,14 +348,14 @@
         function getAvatarColor(name){const colors=['#0071e3','#34c759','#ff9500','#af52de','#ff3b30','#5ac8fa','#ffcc00'];let hash=0;for(let i=0;i<(name||'').length;i++)hash=name.charCodeAt(i)+((hash<<5)-hash);return colors[Math.abs(hash)%colors.length];}
         function getInitials(name){return (name||'未知').split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();}
         function getBadgeClass(category){return{客戶:'badge-client',供應商:'badge-supplier',同事:'badge-colleague',潛在客戶:'badge-prospect',其他:'badge-other'}[category]||'badge-other';}
-        function renderCards(f=''){const grid=document.getElementById('cardsGrid');const q=(f||'').toLowerCase();const filtered=cards.filter(c=>!q||(c.name||'').toLowerCase().includes(q)||(c.company||'').toLowerCase().includes(q)||(c.title||'').toLowerCase().includes(q)||(c.email||'').toLowerCase().includes(q));if(filtered.length===0){grid.innerHTML='<div class="empty"><div>📇</div><p>'+(q?'找不到符合的名片':'尚未建立名片')+'</p></div>';return;}grid.innerHTML=filtered.map((c,i)=>'<div class="card-item" style="animation-delay:'+(i*60)+'ms"><div class="card-header-row"><div class="card-avatar" style="background:'+getAvatarColor(c.name)+'">'+getInitials(c.name)+'</div><div class="card-header-info"><div class="card-name">'+escapeHtml(c.name||'未命名')+'</div><div class="card-title">'+escapeHtml(c.title||'')+'</div><div class="card-company">'+escapeHtml(c.company||'')+'</div></div></div><div><span class="card-badge '+getBadgeClass(c.category)+'">'+escapeHtml(c.category||'其他')+'</span></div><div class="card-info">'+(c.phone?'<div><span>電話</span>'+escapeHtml(c.phone)+'</div>':'')+(c.email?'<div><span>Email</span>'+escapeHtml(c.email)+'</div>':'')+(c.line?'<div><span>LINE</span>'+escapeHtml(c.line)+'</div>':'')+'</div><div class="card-actions"><button class="btn-edit" onclick="editCard(\''+c.id+'\')">編輯</button><button class="btn-edit" onclick="showShareModal(\''+c.id+'\')">分享</button><button class="btn-delete" onclick="deleteCard(\''+c.id+'\')">刪除</button></div></div>').join('');}
+        function renderCards(f=''){const grid=document.getElementById('cardsGrid');const q=(f||'').toLowerCase();const filtered=cards.filter(c=>!q||(c.name||'').toLowerCase().includes(q)||(c.company||'').toLowerCase().includes(q)||(c.title||'').toLowerCase().includes(q)||(c.email||'').toLowerCase().includes(q));if(filtered.length===0){grid.innerHTML='<div class="empty"><div>📇</div><p>'+(q?'找不到符合的名片':'尚未建立名片')+'</p></div>';return;}grid.innerHTML=filtered.map((c,i)=>'<div class="card-item" style="animation-delay:'+(i*60)+'ms">'+(c.image?'<div style="text-align:center;margin-bottom:12px;"><img src="'+c.image+'" style="width:100%;max-height:120px;object-fit:cover;border-radius:10px;" /></div>':'')+'<div class="card-header-row"><div class="card-avatar" style="background:'+getAvatarColor(c.name)+'">'+getInitials(c.name)+'</div><div class="card-header-info"><div class="card-name">'+escapeHtml(c.name||'未命名')+'</div><div class="card-title">'+escapeHtml(c.title||'')+'</div><div class="card-company">'+escapeHtml(c.company||'')+'</div></div></div><div><span class="card-badge '+getBadgeClass(c.category)+'">'+escapeHtml(c.category||'其他')+'</span></div><div class="card-info">'+(c.phone?'<div><span>電話</span>'+escapeHtml(c.phone)+'</div>':'')+(c.email?'<div><span>Email</span>'+escapeHtml(c.email)+'</div>':'')+(c.line?'<div><span>LINE</span>'+escapeHtml(c.line)+'</div>':'')+'</div><div class="card-actions"><button class="btn-edit" onclick="editCard(\''+c.id+'\')">編輯</button><button class="btn-edit" onclick="showShareModal(\''+c.id+'\')">分享</button><button class="btn-delete" onclick="deleteCard(\''+c.id+'\')">刪除</button></div></div>').join('');}
         
         function filterCards(){renderCards(document.getElementById('searchInput').value);}
         
-        function openModal(card=null){editingId=card?.id||null;document.getElementById('modalTitle').textContent=card?'編輯名片':'新增名片';document.getElementById('inputName').value=card?.name||'';document.getElementById('inputTitle').value=card?.title||'';document.getElementById('inputCompany').value=card?.company||'';document.getElementById('inputPhone').value=card?.phone||'';document.getElementById('inputEmail').value=card?.email||'';document.getElementById('inputLine').value=card?.line||'';document.getElementById('inputCategory').value=card?.category||'客戶';document.getElementById('inputAddress').value=card?.address||'';document.getElementById('cardModal').classList.add('show');}
-        function closeModal(){document.getElementById('cardModal').classList.remove('show');editingId=null;}
+        function openModal(card=null){editingId=card?.id||null;document.getElementById('modalTitle').textContent=card?'編輯名片':'新增名片';document.getElementById('inputName').value=card?.name||'';document.getElementById('inputTitle').value=card?.title||'';document.getElementById('inputCompany').value=card?.company||'';document.getElementById('inputPhone').value=card?.phone||'';document.getElementById('inputEmail').value=card?.email||'';document.getElementById('inputLine').value=card?.line||'';document.getElementById('inputCategory').value=card?.category||'客戶';document.getElementById('inputAddress').value=card?.address||'';if(card?.image){currentCardImage=card.image;document.getElementById('imagePreview').src=card.image;document.getElementById('imagePreviewContainer').style.display='block';}else{clearCardImage();}document.getElementById('cardModal').classList.add('show');}
+        function closeModal(){document.getElementById('cardModal').classList.remove('show');editingId=null;clearCardImage();}
         
-        function saveCard(){const name=document.getElementById('inputName').value.trim();if(!name){showToast('請輸入姓名');return;}const cardData={id:editingId||Date.now().toString(),name:name,title:document.getElementById('inputTitle').value.trim(),company:document.getElementById('inputCompany').value.trim(),phone:document.getElementById('inputPhone').value.trim(),email:document.getElementById('inputEmail').value.trim(),line:document.getElementById('inputLine').value.trim(),category:document.getElementById('inputCategory').value,address:document.getElementById('inputAddress').value.trim(),createdAt:editingId?cards.find(c=>c.id===editingId)?.createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};if(editingId){cards[cards.findIndex(c=>c.id===editingId)]=cardData;showToast('名片已更新');}else{cards.unshift(cardData);showToast('名片已新增');}saveUserCards(cards);renderCards();updateStats();closeModal();}
+        function saveCard(){const name=document.getElementById('inputName').value.trim();if(!name){showToast('請輸入姓名');return;}const existingCard=editingId?cards.find(c=>c.id===editingId):null;const cardData={id:editingId||Date.now().toString(),name:name,title:document.getElementById('inputTitle').value.trim(),company:document.getElementById('inputCompany').value.trim(),phone:document.getElementById('inputPhone').value.trim(),email:document.getElementById('inputEmail').value.trim(),line:document.getElementById('inputLine').value.trim(),category:document.getElementById('inputCategory').value,address:document.getElementById('inputAddress').value.trim(),image:currentCardImage||existingCard?.image||null,createdAt:editingId?cards.find(c=>c.id===editingId)?.createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};if(editingId){cards[cards.findIndex(c=>c.id===editingId)]=cardData;showToast('名片已更新');}else{cards.unshift(cardData);showToast('名片已新增');}saveUserCards(cards);renderCards();updateStats();closeModal();}
         function editCard(id){const c=cards.find(x=>x.id===id);if(c)openModal(c);}
         function deleteCard(id){if(confirm('確定要刪除這張名片嗎？')){cards=cards.filter(x=>x.id!==id);saveUserCards(cards);renderCards();updateStats();showToast('名片已刪除');}}
         function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
@@ -394,6 +398,12 @@
                 const reader = new FileReader();
                 reader.onload = async function(e) {
                     try {
+                        // Store image for card saving
+                        currentCardImage = e.target.result;
+                        // Show image preview
+                        document.getElementById('imagePreview').src = currentCardImage;
+                        document.getElementById('imagePreviewContainer').style.display = 'block';
+                        // Run OCR
                         const result = await Tesseract.recognize(e.target.result, 'chi_tra+eng', {
                             logger: m => { if (m.status === 'recognizing text') percent.textContent = Math.round(m.progress * 100) + '%'; }
                         });
@@ -405,6 +415,12 @@
                 reader.readAsDataURL(file);
             } catch(e) { showToast('上傳失敗：' + e.message); progress.classList.remove('show'); }
             event.target.value = '';
+        }
+        
+        function clearCardImage() {
+            currentCardImage = null;
+            document.getElementById('imagePreviewContainer').style.display = 'none';
+            document.getElementById('imagePreview').src = '';
         }
     </script>
 </body>
