@@ -7,6 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxal5m3DwS3ml4e5t/sk6j3J5dJbVCzBc+WAZYpJWv5S6JhCgrLK1x9w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root { --primary: #0071e3; --primary-dark: #0063c9; --accent: #34c759; --danger: #ff3b30; --text: #1d1d1f; --text2: #86868b; --bg: #f5f5f7; --card: #fff; --border: #d2d2d7; }
@@ -26,8 +27,8 @@
         
         .login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
         .login-screen.hidden { display: none; }
-        .login-box { background: var(--card); border-radius: 20px; padding: 32px; width: 100%; max-width: 380px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
-        .login-box h1 { font-size: 24px; text-align: center; margin-bottom: 8px; }
+        .login-box { background: var(--card); border-radius: 20px; padding: 32px; width: 100%; max-width: 380px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.05); }
+        .login-box h1 { font-size: 22px; text-align: center; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .login-box .subtitle { text-align: center; color: var(--text2); font-size: 13px; margin-bottom: 24px; }
         
         .form-group { margin-bottom: 16px; }
@@ -48,7 +49,7 @@
         .error-msg { color: var(--danger); font-size: 12px; margin-top: 8px; display: none; }
         .error-msg.show { display: block; }
         
-        .header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 16px 20px; color: #fff; display: flex; justify-content: space-between; align-items: center; }
+        .header { background: linear-gradient(135deg, #0f1117 0%, #1a1a2e 50%, #16213e 100%); padding: 16px 20px; color: #fff; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .header.hidden { display: none; }
         .header h1 { font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
         .header .logout-btn { padding: 6px 12px; background: rgba(255,255,255,0.2); border: none; border-radius: 6px; color: #fff; font-size: 12px; cursor: pointer; }
@@ -56,10 +57,12 @@
         .container { max-width: 800px; margin: 0 auto; padding: 20px; }
         .container.hidden { display: none; }
         
-        .scan-fab { position: fixed; bottom: 90px; right: 24px; width: 56px; height: 56px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #fff; box-shadow: 0 4px 20px rgba(52,199,89,0.4); cursor: pointer; z-index: 100; }
+        .scan-fab { position: fixed; bottom: 90px; right: 24px; width: 56px; height: 56px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #fff; box-shadow: 0 4px 20px rgba(52,199,89,0.4); cursor: pointer; z-index: 100; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease; }
+        .scan-fab:hover { transform: scale(1.1); box-shadow: 0 8px 32px rgba(52,199,89,0.5); }
         .scan-fab.hidden { display: none; }
         
-        .add-btn { position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; color: #fff; box-shadow: 0 4px 20px rgba(0,113,227,0.4); cursor: pointer; z-index: 100; }
+        .add-btn { position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; color: #fff; box-shadow: 0 4px 20px rgba(0,113,227,0.4); cursor: pointer; z-index: 100; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease; }
+        .add-btn:hover { transform: scale(1.1); box-shadow: 0 8px 32px rgba(0,113,227,0.5); }
         .add-btn.hidden { display: none; }
         
         .search-box { background: var(--card); border-radius: 14px; padding: 16px; margin-bottom: 16px; display: flex; gap: 10px; }
@@ -83,7 +86,7 @@
         .btn-edit { background: var(--bg); }
         .btn-delete { background: rgba(255,59,48,0.1); color: var(--danger); }
         
-        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
+        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
         .modal.show { display: flex; }
         .modal-content { background: var(--card); border-radius: 20px; padding: 24px; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
@@ -116,7 +119,7 @@
         .empty { text-align: center; padding: 60px 20px; color: var(--text2); }
         .empty div:first-child { font-size: 50px; margin-bottom: 16px; }
         
-        .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(120px); background: #1d1d1f; color: #fff; padding: 14px 24px; border-radius: 12px; font-size: 14px; opacity: 0; transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); z-index: 300; box-shadow: 0 8px 32px rgba(0,0,0,0.2); pointer-events: none; }
+        .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(120px); background: #1d1d1f; color: #fff; padding: 14px 24px; border-radius: 12px; font-size: 14px; opacity: 0; transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); z-index: 300; box-shadow: 0 8px 32px rgba(0,0,0,0.2); pointer-events: none; display: flex; align-items: center; gap: 6px; }
         .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
         /* Card hover lift effect */
@@ -188,7 +191,7 @@
 <body>
     <div class="login-screen" id="loginScreen">
         <div class="login-box">
-            <h1>💼 名片王</h1>
+            <h1><i class="fa-solid fa-id-card-clip" style="color:#0071e3;margin-right:8px;"></i> 名片王</h1>
             <p class="subtitle">AI 辨識版 - 掃描名片自動輸入</p>
             <div class="login-tabs">
                 <button class="active" id="tabLogin" onclick="showTab('login')">登入</button>
@@ -198,27 +201,27 @@
                 <div class="form-group"><label>帳號</label><input type="text" id="loginUsername" placeholder="輸入帳號"></div>
                 <div class="form-group"><label>密碼</label><input type="password" id="loginPassword" placeholder="輸入密碼"></div>
                 <div class="error-msg" id="loginError"></div>
-                <button class="btn btn-primary" onclick="login()">登入</button>
+                <button class="btn btn-primary" onclick="login()"><i class="fa-solid fa-right-to-bracket" style="margin-right:6px;"></i>登入</button>
             </div>
             <div id="registerForm" style="display:none;">
                 <div class="form-group"><label>帳號</label><input type="text" id="regUsername" placeholder="設定帳號"></div>
                 <div class="form-group"><label>密碼</label><input type="password" id="regPassword" placeholder="設定密碼"></div>
                 <div class="form-group"><label>確認密碼</label><input type="password" id="regConfirm" placeholder="再次輸入密碼"></div>
                 <div class="error-msg" id="regError"></div>
-                <button class="btn btn-primary" onclick="register()">註冊</button>
+                <button class="btn btn-primary" onclick="register()"><i class="fa-solid fa-user-plus" style="margin-right:6px;"></i>註冊</button>
             </div>
         </div>
     </div>
     
     <div class="header hidden" id="header">
-        <h1>💼 名片王</h1>
-        <div class="user-info"><span id="welcomeUser"></span><button onclick="openSyncModal()" style="padding:6px 10px;background:rgba(52,199,89,0.3);border:none;border-radius:6px;color:#fff;font-size:11px;cursor:pointer;margin-right:8px;">🔄</button><button class="logout-btn" onclick="logout()">登出</button></div>
+        <h1><i class="fa-solid fa-id-card-clip" style="color:#34c759;margin-right:8px;"></i> 名片王</h1>
+        <div class="user-info"><span id="welcomeUser"></span><button onclick="openSyncModal()" style="padding:6px 12px;background:rgba(52,199,89,0.2);border:1px solid rgba(52,199,89,0.3);border-radius:8px;color:#34c759;font-size:12px;cursor:pointer;margin-right:8px;display:flex;align-items:center;gap:5px;transition:all 0.2s ease;" title="Telegram 同步"><i class="fa-brands fa-telegram" style="font-size:13px;"></i> 同步</button><button class="logout-btn" onclick="logout()"><i class="fa-solid fa-right-from-bracket" style="margin-right:4px;"></i>登出</button></div>
     </div>
     
     <div class="container hidden" id="mainContent">
         <div class="search-box">
             <input type="text" id="searchInput" placeholder="搜尋姓名、公司、職稱..." oninput="filterCards()">
-            <button class="btn btn-primary" style="width:auto;padding:12px 20px;" onclick="filterCards()">搜尋</button>
+            <button class="btn btn-primary" style="width:auto;padding:12px 20px;" onclick="filterCards()"><i class="fa-solid fa-magnifying-glass" style="margin-right:6px;"></i>搜尋</button>
         </div>
         <div class="stats">
             <div class="stat-card"><div class="num" id="totalCount">0</div><div class="label">總名片數</div></div>
@@ -226,27 +229,27 @@
             <div class="stat-card"><div class="num" id="thisMonth">0</div><div class="label">本月新增</div></div>
         </div>
         <div class="cards-grid" id="cardsGrid">
-            <div class="empty"><div>📇</div><p>尚未建立名片</p><p>點擊下方 + 按鈕新增名片</p></div>
+            <div class="empty"><div><i class="fa-solid fa-address-card" style="font-size:56px;color:#d2d2d7;margin-bottom:16px;"></i></div><p>尚未建立名片</p><p>點擊下方 <i class="fa-solid fa-plus" style="font-size:12px;"></i> 按鈕新增名片</p></div>
         </div>
     </div>
     
-    <div class="scan-fab hidden" id="scanFab" onclick="startScan()">📷</div>
+    <div class="scan-fab hidden" id="scanFab" onclick="startScan()"><i class="fa-solid fa-camera"></i></div>
     
     <!-- 分享 Modal -->
     <div class="modal" id="shareModal">
         <div class="modal-content" style="text-align:center">
-            <div class="modal-header"><h2>分享名片</h2><button class="modal-close" onclick="closeShare()">×</button></div>
+            <div class="modal-header"><h2><i class="fa-solid fa-share-nodes" style="color:var(--primary);margin-right:8px;"></i> 分享名片</h2><button class="modal-close" onclick="closeShare()">×</button></div>
             <div id="qrContainer" style="margin:20px auto"></div>
             <div style="display:flex;gap:10px;justify-content:center;margin-top:20px">
-                <button class="btn btn-primary" style="width:auto;padding:12px 24px" onclick="downloadVCard()">📥 下載 vCard</button>
-                <button class="btn" style="width:auto;padding:12px 24px;background:var(--bg)" onclick="copyVCard()">📋 複製</button>
+                <button class="btn btn-primary" style="width:auto;padding:12px 24px" onclick="downloadVCard()"><i class="fa-solid fa-download" style="margin-right:6px;"></i>下載 vCard</button>
+                <button class="btn" style="width:auto;padding:12px 24px;background:var(--bg)" onclick="copyVCard()"><i class="fa-regular fa-copy" style="margin-right:6px;"></i>複製</button>
             </div>
         </div>
     </div>
     
     <div class="modal" id="cardModal">
         <div class="modal-content">
-            <div class="modal-header"><h2 id="modalTitle">新增名片</h2><button class="modal-close" onclick="closeModal()">×</button></div>
+            <div class="modal-header"><h2 id="modalTitle"><i class="fa-solid fa-pen" style="color:var(--primary);margin-right:8px;"></i>新增名片</h2><button class="modal-close" onclick="closeModal()">×</button></div>
             <div class="form-row">
                 <div class="form-group"><label>姓名 *</label><input type="text" id="inputName" placeholder="王大明"></div>
                 <div class="form-group"><label>職稱</label><input type="text" id="inputTitle" placeholder="業務經理"></div>
@@ -262,16 +265,16 @@
             </div>
             <div class="form-group"><label>地址</label><input type="text" id="inputAddress" placeholder="台北市信義區忠孝東路一段"></div>
             <div style="display:flex;gap:10px;margin-top:12px;">
-                <button class="btn btn-scan" onclick="startScanFromModal()" style="flex:1;">📷 拍照掃描</button>
-                <button class="btn" onclick="document.getElementById('fileUpload').click()" style="flex:1;background:var(--accent);color:#fff;">📁 上傳圖片</button>
+                <button class="btn btn-scan" onclick="startScanFromModal()" style="flex:1;"><i class="fa-solid fa-camera" style="margin-right:6px;"></i>拍照掃描</button>
+                <button class="btn" onclick="document.getElementById('fileUpload').click()" style="flex:1;background:var(--accent);color:#fff;"><i class="fa-solid fa-image" style="margin-right:6px;"></i>上傳圖片</button>
             </div>
             <div id="imagePreviewContainer" style="display:none;margin-top:12px;text-align:center;">
                 <img id="imagePreview" style="max-width:100%;max-height:150px;border-radius:10px;border:2px solid var(--border);" />
                 <div id="imageSizeHint" style="font-size:11px;color:var(--text2);margin-top:4px;"></div>
-                <button onclick="clearCardImage()" style="margin-top:6px;padding:4px 12px;background:var(--danger);color:#fff;border:none;border-radius:6px;font-size:12px;cursor:pointer;">✕ 移除圖片</button>
+                <button onclick="clearCardImage()" style="margin-top:6px;padding:4px 12px;background:var(--danger);color:#fff;border:none;border-radius:6px;font-size:12px;cursor:pointer;"><i class="fa-solid fa-xmark" style="margin-right:4px;"></i>移除圖片</button>
             </div>
             <input type="file" id="fileUpload" accept="image/*" style="display:none;" onchange="handleFileUpload(event)">
-            <div class="modal-actions"><button class="btn-cancel" onclick="closeModal()">取消</button><button class="btn-save" onclick="saveCard()">儲存名片</button></div>
+            <div class="modal-actions"><button class="btn-cancel" onclick="closeModal()">取消</button><button class="btn-save" onclick="saveCard()"><i class="fa-solid fa-floppy-disk" style="margin-right:6px;"></i>儲存名片</button></div>
         </div>
     </div>
     
@@ -282,7 +285,7 @@
             <div class="scan-overlay"></div>
             <div class="scan-hint">將名片放入框內</div>
             <div class="scan-buttons">
-                <button class="scan-btn close" onclick="closeScan()">×</button>
+                <button class="scan-btn close" onclick="closeScan()"><i class="fa-solid fa-xmark"></i></button>
                 <button class="scan-btn capture" onclick="captureImage()"></button>
             </div>
         </div>
@@ -294,13 +297,13 @@
         <div class="percent" id="scanPercent">0%</div>
     </div>
     
-    <div class="add-btn hidden" id="addBtn" onclick="openModal()">+</div>
+    <div class="add-btn hidden" id="addBtn" onclick="openModal()"><i class="fa-solid fa-plus"></i></div>
     <div class="toast" id="toast"></div>
     
     <!-- Sync Modal -->
     <div class="modal" id="syncModal">
         <div class="modal-content">
-            <div class="modal-header"><h2>🔗 Telegram 同步</h2><button class="modal-close" onclick="closeSyncModal()">×</button></div>
+            <div class="modal-header"><h2><i class="fa-brands fa-telegram" style="color:#34c759;margin-right:8px;font-size:18px;"></i> Telegram 同步</h2><button class="modal-close" onclick="closeSyncModal()">×</button></div>
             <div style="margin-bottom:20px;">
                 <div style="font-size:14px;color:var(--text2);margin-bottom:16px;">
                     綁定 Telegram 後，可以透過 Bot 上傳名片照片自動辨識並同步到此帳戶
@@ -316,7 +319,7 @@
                 <button class="btn btn-primary" onclick="linkTelegram()">綁定帳戶</button>
                 <hr style="margin:20px 0;border:none;border-top:1px solid var(--border);">
                 <div style="font-size:14px;margin-bottom:12px;">從 Telegram 同步名片</div>
-                <button class="btn" style="background:var(--accent);color:#fff;" onclick="syncFromTelegram()">🔄 同步名片</button>
+                <button class="btn" style="background:var(--accent);color:#fff;" onclick="syncFromTelegram()"><i class="fa-solid fa-rotate" style="margin-right:6px;"></i>同步名片</button>
                 <div style="font-size:12px;color:var(--text2);margin-top:12px;">
                     或在 Telegram 搜尋 <b>@CardKingBot</b> 來上傳名片
                 </div>
@@ -349,17 +352,17 @@
         function getAvatarColor(name){const colors=['#0071e3','#34c759','#ff9500','#af52de','#ff3b30','#5ac8fa','#ffcc00'];let hash=0;for(let i=0;i<(name||'').length;i++)hash=name.charCodeAt(i)+((hash<<5)-hash);return colors[Math.abs(hash)%colors.length];}
         function getInitials(name){return (name||'未知').split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();}
         function getBadgeClass(category){return{客戶:'badge-client',供應商:'badge-supplier',同事:'badge-colleague',潛在客戶:'badge-prospect',其他:'badge-other'}[category]||'badge-other';}
-        function renderCards(f=''){const grid=document.getElementById('cardsGrid');const q=(f||'').toLowerCase();const filtered=cards.filter(c=>!q||(c.name||'').toLowerCase().includes(q)||(c.company||'').toLowerCase().includes(q)||(c.title||'').toLowerCase().includes(q)||(c.email||'').toLowerCase().includes(q));if(filtered.length===0){grid.innerHTML='<div class="empty"><div>📇</div><p>'+(q?'找不到符合的名片':'尚未建立名片')+'</p></div>';return;}grid.innerHTML=filtered.map((c,i)=>'<div class="card-item" style="animation-delay:'+(i*60)+'ms">'+(c.image?'<div style="text-align:center;margin-bottom:12px;"><img src="'+c.image+'" style="width:100%;max-height:120px;object-fit:cover;border-radius:10px;" /></div>':'')+'<div class="card-header-row"><div class="card-avatar" style="background:'+getAvatarColor(c.name)+'">'+getInitials(c.name)+'</div><div class="card-header-info"><div class="card-name">'+escapeHtml(c.name||'未命名')+'</div><div class="card-title">'+escapeHtml(c.title||'')+'</div><div class="card-company">'+escapeHtml(c.company||'')+'</div></div></div><div><span class="card-badge '+getBadgeClass(c.category)+'">'+escapeHtml(c.category||'其他')+'</span></div><div class="card-info">'+(c.phone?'<div><span>電話</span>'+escapeHtml(c.phone)+'</div>':'')+(c.email?'<div><span>Email</span>'+escapeHtml(c.email)+'</div>':'')+(c.line?'<div><span>LINE</span>'+escapeHtml(c.line)+'</div>':'')+'</div><div class="card-actions"><button class="btn-edit" onclick="editCard(\''+c.id+'\')">編輯</button><button class="btn-edit" onclick="showShareModal(\''+c.id+'\')">分享</button><button class="btn-delete" onclick="deleteCard(\''+c.id+'\')">刪除</button></div></div>').join('');}
+        function renderCards(f=''){const grid=document.getElementById('cardsGrid');const q=(f||'').toLowerCase();const filtered=cards.filter(c=>!q||(c.name||'').toLowerCase().includes(q)||(c.company||'').toLowerCase().includes(q)||(c.title||'').toLowerCase().includes(q)||(c.email||'').toLowerCase().includes(q));if(filtered.length===0){grid.innerHTML='<div class="empty"><div><i class="fa-solid fa-address-card" style="font-size:56px;color:#d2d2d7;margin-bottom:16px;"></i></div><p>'+(q?'找不到符合的名片':'尚未建立名片')+'</p></div>';return;}grid.innerHTML=filtered.map((c,i)=>'<div class="card-item" style="animation-delay:'+(i*60)+'ms">'+(c.image?'<div style="text-align:center;margin-bottom:12px;"><img src="'+c.image+'" style="width:100%;max-height:120px;object-fit:cover;border-radius:10px;" /></div>':'')+'<div class="card-header-row"><div class="card-avatar" style="background:'+getAvatarColor(c.name)+'">'+getInitials(c.name)+'</div><div class="card-header-info"><div class="card-name">'+escapeHtml(c.name||'未命名')+'</div><div class="card-title">'+escapeHtml(c.title||'')+'</div><div class="card-company">'+escapeHtml(c.company||'')+'</div></div></div><div><span class="card-badge '+getBadgeClass(c.category)+'">'+escapeHtml(c.category||'其他')+'</span></div><div class="card-info">'+(c.phone?'<div><span>電話</span>'+escapeHtml(c.phone)+'</div>':'')+(c.email?'<div><span>Email</span>'+escapeHtml(c.email)+'</div>':'')+(c.line?'<div><span>LINE</span>'+escapeHtml(c.line)+'</div>':'')+'</div><div class="card-actions"><button class="btn-edit" onclick="editCard(\''+c.id+'\')">編輯</button><button class="btn-edit" onclick="showShareModal(\''+c.id+'\')">分享</button><button class="btn-delete" onclick="deleteCard(\''+c.id+'\')">刪除</button></div></div>').join('');}
         
         function filterCards(){renderCards(document.getElementById('searchInput').value);}
         
-        function openModal(card=null){editingId=card?.id||null;document.getElementById('modalTitle').textContent=card?'編輯名片':'新增名片';document.getElementById('inputName').value=card?.name||'';document.getElementById('inputTitle').value=card?.title||'';document.getElementById('inputCompany').value=card?.company||'';document.getElementById('inputPhone').value=card?.phone||'';document.getElementById('inputEmail').value=card?.email||'';document.getElementById('inputLine').value=card?.line||'';document.getElementById('inputCategory').value=card?.category||'客戶';document.getElementById('inputAddress').value=card?.address||'';if(card?.image){currentCardImage=card.image;document.getElementById('imagePreview').src=card.image;document.getElementById('imagePreviewContainer').style.display='block';}else{clearCardImage();}document.getElementById('cardModal').classList.add('show');}
+        function openModal(card=null){editingId=card?.id||null;document.getElementById('modalTitle').innerHTML='<i class="fa-solid fa-pen" style="color:var(--primary);margin-right:8px;"></i>'+(card?'編輯名片':'新增名片');document.getElementById('inputName').value=card?.name||'';document.getElementById('inputTitle').value=card?.title||'';document.getElementById('inputCompany').value=card?.company||'';document.getElementById('inputPhone').value=card?.phone||'';document.getElementById('inputEmail').value=card?.email||'';document.getElementById('inputLine').value=card?.line||'';document.getElementById('inputCategory').value=card?.category||'客戶';document.getElementById('inputAddress').value=card?.address||'';if(card?.image){currentCardImage=card.image;document.getElementById('imagePreview').src=card.image;document.getElementById('imagePreviewContainer').style.display='block';}else{clearCardImage();}document.getElementById('cardModal').classList.add('show');}
         function closeModal(){document.getElementById('cardModal').classList.remove('show');editingId=null;clearCardImage();}
         
         function saveCard(){const name=document.getElementById('inputName').value.trim();if(!name){showToast('請輸入姓名');return;}const existingCard=editingId?cards.find(c=>c.id===editingId):null;const cardData={id:editingId||Date.now().toString(),name:name,title:document.getElementById('inputTitle').value.trim(),company:document.getElementById('inputCompany').value.trim(),phone:document.getElementById('inputPhone').value.trim(),email:document.getElementById('inputEmail').value.trim(),line:document.getElementById('inputLine').value.trim(),category:document.getElementById('inputCategory').value,address:document.getElementById('inputAddress').value.trim(),image:currentCardImage||existingCard?.image||null,createdAt:editingId?cards.find(c=>c.id===editingId)?.createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};if(editingId){cards[cards.findIndex(c=>c.id===editingId)]=cardData;showToast('名片已更新');}else{cards.unshift(cardData);showToast('名片已新增');}saveUserCards(cards);renderCards();updateStats();closeModal();}
         function editCard(id){const c=cards.find(x=>x.id===id);if(c)openModal(c);}
         function deleteCard(id){if(confirm('確定要刪除這張名片嗎？')){cards=cards.filter(x=>x.id!==id);saveUserCards(cards);renderCards();updateStats();showToast('名片已刪除');}}
-        function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+        function showToast(msg){const t=document.getElementById('toast');t.innerHTML=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
         
         // 分享功能
         let currentShareCard = null;
@@ -383,9 +386,9 @@
         function closeSyncModal() { document.getElementById('syncModal').classList.remove('show'); }
         function getTelegramLink() { return JSON.parse(localStorage.getItem('telegramLink')) || {}; }
         function saveTelegramLink(data) { localStorage.setItem('telegramLink', JSON.stringify(data)); }
-        function renderTelegramLink() { const link = getTelegramLink(); document.getElementById('telegramStatus').innerHTML = link.username ? '<span style="color:var(--accent)">✅ 已綁定: @' + link.username + '</span>' : '<span style="color:var(--text2)">尚未綁定</span>'; }
-        async function linkTelegram() { const username = document.getElementById('telegramUsername').value.trim(); if (!username) { showToast('請輸入 Telegram 使用者名稱'); return; } saveTelegramLink({ username: username, linkedAt: new Date().toISOString() }); showToast('✅ 已綁定 Telegram'); renderTelegramLink(); }
-        async function syncFromTelegram() { showToast('🔄 正在同步...'); const link = getTelegramLink(); if (!link.username) { showToast('請先綁定 Telegram'); return; } const saved = localStorage.getItem('telegramCards_' + currentUser); if (saved) { const tCards = JSON.parse(saved); if (tCards.length > 0) { cards = [...tCards, ...cards]; saveUserCards(cards); renderCards(); updateStats(); showToast('✅ 同步 ' + tCards.length + ' 張名片'); } else { showToast('沒有新名片'); } } else { showToast('沒有 Telegram 名片資料'); } }
+        function renderTelegramLink() { const link = getTelegramLink(); document.getElementById('telegramStatus').innerHTML = link.username ? '<span style="color:var(--accent)"><i class="fa-solid fa-circle-check" style="margin-right:6px;"></i>已綁定: @' + link.username + '</span>' : '<span style="color:var(--text2)">尚未綁定</span>'; }
+        async function linkTelegram() { const username = document.getElementById('telegramUsername').value.trim(); if (!username) { showToast('請輸入 Telegram 使用者名稱'); return; } saveTelegramLink({ username: username, linkedAt: new Date().toISOString() }); showToast('<i class="fa-solid fa-circle-check" style="color:#34c759;margin-right:6px;"></i>已綁定 Telegram'); renderTelegramLink(); }
+        async function syncFromTelegram() { showToast('<i class="fa-solid fa-rotate" style="margin-right:6px;"></i>正在同步...'); const link = getTelegramLink(); if (!link.username) { showToast('請先綁定 Telegram'); return; } const saved = localStorage.getItem('telegramCards_' + currentUser); if (saved) { const tCards = JSON.parse(saved); if (tCards.length > 0) { cards = [...tCards, ...cards]; saveUserCards(cards); renderCards(); updateStats(); showToast('<i class="fa-solid fa-circle-check" style="color:#34c759;margin-right:6px;"></i>同步 ' + tCards.length + ' 張名片'); } else { showToast('沒有新名片'); } } else { showToast('沒有 Telegram 名片資料'); } }
         
         // Handle file upload for OCR
         // Image compression helper: resize + JPEG compress to keep localStorage usage low
@@ -437,7 +440,7 @@
                 // Show image size hint
                 const origKB = Math.round(file.size / 1024);
                 const storedKB = Math.round(currentCardImage.length * 0.75 / 1024);
-                document.getElementById('imageSizeHint').textContent = `📦 原圖: ${origKB}KB → 儲存: ${storedKB}KB`;
+                document.getElementById('imageSizeHint').innerHTML = `<i class="fa-solid fa-box-archive" style="margin-right:4px;"></i> 原圖: ${origKB}KB → 儲存: ${storedKB}KB`;
                 // Show image preview
                 document.getElementById('imagePreview').src = currentCardImage;
                 document.getElementById('imagePreviewContainer').style.display = 'block';
@@ -446,7 +449,7 @@
                     logger: m => { if (m.status === 'recognizing text') percent.textContent = Math.round(m.progress * 100) + '%'; }
                 });
                 parseCardInfo(result.data.text);
-                showToast('✅ 圖片上傳成功');
+                showToast('<i class="fa-solid fa-circle-check" style="color:#34c759;margin-right:6px;"></i>圖片上傳成功');
             } catch(e) { showToast('上傳失敗：' + e.message); }
             progress.classList.remove('show');
             event.target.value = '';
