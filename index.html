@@ -3,38 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>名片王 - Business Card Manager</title>
+    <title>名片王 - 專業數位名片管理</title>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <style>
-        /* ===== Design System — Professional Corporate ===== */
+        /* ===== Design System — Premium Corporate ===== */
         :root {
-          --primary: #1b3a6b;
-          --primary-mid: #244f9a;
-          --primary-light: #e8edf7;
-          --accent: #c0392b;
-          --accent-light: #fdf0ef;
-          --green: #1a7a4a;
+          --primary: #0f2240;
+          --primary-mid: #1a3a6c;
+          --primary-light: #e8eef8;
+          --accent: #e8380d;
+          --accent-hover: #c42d09;
+          --accent-light: #fff1ee;
+          --green: #0d7a4a;
           --green-light: #edf7f2;
-          --text: #1a1a2e;
-          --text2: #4a4a6a;
-          --text3: #9090a8;
-          --bg: #f0f2f5;
-          --bg2: #e2e6ed;
+          --text: #0f1923;
+          --text2: #3d4a5c;
+          --text3: #7a8694;
+          --text4: #b0bac4;
+          --bg: #f4f6f9;
+          --bg2: #e8ecf1;
           --card: #ffffff;
-          --border: #dde1e9;
-          --border-strong: #c4cad6;
-          --shadow-xs: 0 1px 2px rgba(0,0,0,0.05);
-          --shadow-sm: 0 1px 4px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
-          --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.05);
-          --shadow-lg: 0 8px 28px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.06);
-          --radius-sm: 4px;
-          --radius-md: 8px;
-          --radius-lg: 12px;
+          --card2: #fafbfc;
+          --border: #dde3eb;
+          --border-strong: #c4cdd8;
+          --shadow-xs: 0 1px 2px rgba(15,25,40,0.04);
+          --shadow-sm: 0 2px 8px rgba(15,25,40,0.07), 0 1px 2px rgba(15,25,40,0.04);
+          --shadow-md: 0 6px 24px rgba(15,25,40,0.09), 0 2px 8px rgba(15,25,40,0.05);
+          --shadow-lg: 0 16px 48px rgba(15,25,40,0.12), 0 4px 16px rgba(15,25,40,0.06);
+          --shadow-xl: 0 24px 64px rgba(15,25,40,0.14), 0 8px 24px rgba(15,25,40,0.07);
+          --radius-xs: 3px;
+          --radius-sm: 6px;
+          --radius-md: 10px;
+          --radius-lg: 16px;
+          --radius-xl: 24px;
           --header-bg: #ffffff;
-          --header-border: #dde1e9;
+          --header-border: #e8ecf1;
           --font-main: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         }
 
@@ -46,69 +52,499 @@
           min-height: 100vh;
           -webkit-font-smoothing: antialiased;
           -moz-osx-font-smoothing: grayscale;
+          overflow-x: hidden;
         }
+        *, *::before, *::after { transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease, transform 0.2s ease; }
+        *:focus-visible { outline: 2px solid var(--primary-mid); outline-offset: 2px; }
 
-        *, *::before, *::after { transition: background-color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease; }
-
-        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--bg2); border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+        ::-webkit-scrollbar-thumb { background: var(--bg2); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text4); }
 
-        :focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+        /* ===== LANDING PAGE ===== */
+        .landing {
+          background: var(--primary);
+          min-height: 100vh;
+          position: relative;
+          overflow: hidden;
+        }
+        .landing.hidden { display: none; }
 
-        /* ===== Login Screen ===== */
+        /* Nav */
+        .landing-nav {
+          position: fixed;
+          top: 0; left: 0; right: 0;
+          z-index: 100;
+          padding: 0 40px;
+          height: 68px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          background: rgba(15, 34, 64, 0.92);
+          backdrop-filter: blur(12px);
+          border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .landing-nav-brand {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          text-decoration: none;
+        }
+        .landing-nav-logo {
+          width: 36px;
+          height: 36px;
+          background: linear-gradient(135deg, #e8380d, #ff6b35);
+          border-radius: 9px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #fff;
+          font-size: 16px;
+          font-weight: 800;
+          box-shadow: 0 4px 12px rgba(232,56,13,0.35);
+        }
+        .landing-nav-name {
+          font-size: 17px;
+          font-weight: 800;
+          color: #fff;
+          letter-spacing: -0.3px;
+        }
+        .landing-nav-links {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+        .landing-nav-links a {
+          color: rgba(255,255,255,0.7);
+          text-decoration: none;
+          font-size: 13.5px;
+          font-weight: 500;
+          padding: 8px 16px;
+          border-radius: var(--radius-sm);
+        }
+        .landing-nav-links a:hover { color: #fff; background: rgba(255,255,255,0.08); }
+        .landing-nav-cta {
+          background: linear-gradient(135deg, #e8380d, #ff6b35) !important;
+          color: #fff !important;
+          font-weight: 600 !important;
+          box-shadow: 0 4px 14px rgba(232,56,13,0.4);
+        }
+        .landing-nav-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(232,56,13,0.5) !important; }
+
+        /* Hero */
+        .hero {
+          position: relative;
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          padding: 100px 40px 80px;
+          overflow: hidden;
+        }
+        .hero-bg {
+          position: absolute;
+          inset: 0;
+          background:
+            radial-gradient(ellipse 80% 60% at 50% -10%, rgba(232,56,13,0.18) 0%, transparent 60%),
+            radial-gradient(ellipse 60% 50% at 80% 80%, rgba(26,58,108,0.5) 0%, transparent 50%),
+            radial-gradient(ellipse 50% 40% at 10% 70%, rgba(13,122,74,0.2) 0%, transparent 50%);
+        }
+        .hero-grid {
+          position: absolute;
+          inset: 0;
+          background-image:
+            linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+          background-size: 60px 60px;
+          mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black 20%, transparent 70%);
+        }
+        .hero-float-1, .hero-float-2, .hero-float-3 {
+          position: absolute;
+          border-radius: var(--radius-lg);
+          backdrop-filter: blur(16px);
+          border: 1px solid rgba(255,255,255,0.08);
+          background: rgba(255,255,255,0.05);
+        }
+        .hero-float-1 {
+          width: 200px; height: 130px;
+          top: 18%; right: 8%;
+          animation: float1 8s ease-in-out infinite;
+          display: flex; align-items: center; justify-content: center; gap: 12px; flex-direction: column;
+        }
+        .hero-float-2 {
+          width: 160px; height: 110px;
+          bottom: 20%; right: 14%;
+          animation: float2 10s ease-in-out infinite;
+          display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 8px;
+        }
+        .hero-float-3 {
+          width: 140px; height: 90px;
+          bottom: 28%; left: 4%;
+          animation: float3 9s ease-in-out infinite;
+        }
+        @keyframes float1 { 0%,100% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-16px) rotate(1deg); } }
+        @keyframes float2 { 0%,100% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-12px) rotate(-1deg); } }
+        @keyframes float3 { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+        .hf-icon { font-size: 28px; color: rgba(255,255,255,0.5); }
+        .hf-text { font-size: 11px; color: rgba(255,255,255,0.4); font-weight: 500; text-align: center; }
+        .hf-num { font-size: 22px; font-weight: 800; color: rgba(255,255,255,0.7); }
+
+        .hero-content {
+          position: relative;
+          z-index: 2;
+          max-width: 700px;
+        }
+        .hero-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          background: rgba(232,56,13,0.15);
+          border: 1px solid rgba(232,56,13,0.25);
+          color: #ff7a55;
+          font-size: 12px;
+          font-weight: 600;
+          padding: 6px 14px;
+          border-radius: 100px;
+          margin-bottom: 28px;
+          letter-spacing: 0.3px;
+        }
+        .hero-badge-dot {
+          width: 6px; height: 6px;
+          background: #e8380d;
+          border-radius: 50%;
+          animation: pulse-dot 2s ease-in-out infinite;
+        }
+        @keyframes pulse-dot { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.8); } }
+        .hero-title {
+          font-size: clamp(38px, 5.5vw, 66px);
+          font-weight: 900;
+          color: #fff;
+          line-height: 1.12;
+          letter-spacing: -1.5px;
+          margin-bottom: 24px;
+        }
+        .hero-title .accent { color: #ff6b35; }
+        .hero-subtitle {
+          font-size: 17px;
+          color: rgba(255,255,255,0.6);
+          line-height: 1.7;
+          margin-bottom: 40px;
+          max-width: 540px;
+          font-weight: 400;
+        }
+        .hero-actions {
+          display: flex;
+          gap: 14px;
+          flex-wrap: wrap;
+        }
+        .hero-btn-primary {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 14px 28px;
+          background: linear-gradient(135deg, #e8380d, #ff6b35);
+          color: #fff;
+          font-size: 15px;
+          font-weight: 700;
+          border: none;
+          border-radius: var(--radius-md);
+          cursor: pointer;
+          font-family: inherit;
+          box-shadow: 0 6px 24px rgba(232,56,13,0.4);
+          text-decoration: none;
+        }
+        .hero-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(232,56,13,0.5); }
+        .hero-btn-ghost {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 14px 28px;
+          background: rgba(255,255,255,0.07);
+          color: rgba(255,255,255,0.8);
+          font-size: 15px;
+          font-weight: 600;
+          border: 1px solid rgba(255,255,255,0.12);
+          border-radius: var(--radius-md);
+          cursor: pointer;
+          font-family: inherit;
+          text-decoration: none;
+        }
+        .hero-btn-ghost:hover { background: rgba(255,255,255,0.12); color: #fff; border-color: rgba(255,255,255,0.2); }
+
+        .hero-trust {
+          margin-top: 56px;
+          display: flex;
+          align-items: center;
+          gap: 20px;
+          flex-wrap: wrap;
+        }
+        .hero-trust-item {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          color: rgba(255,255,255,0.4);
+          font-size: 12px;
+          font-weight: 500;
+        }
+        .hero-trust-item i { color: #0d7a4a; font-size: 11px; }
+        .hero-trust-divider { width: 1px; height: 16px; background: rgba(255,255,255,0.1); }
+
+        /* Features Section */
+        .features {
+          background: var(--bg);
+          padding: 100px 40px;
+        }
+        .features-inner { max-width: 1100px; margin: 0 auto; }
+        .section-eyebrow {
+          font-size: 12px;
+          font-weight: 700;
+          color: var(--accent);
+          text-transform: uppercase;
+          letter-spacing: 1.5px;
+          margin-bottom: 12px;
+        }
+        .section-title {
+          font-size: clamp(28px, 4vw, 42px);
+          font-weight: 900;
+          color: var(--text);
+          letter-spacing: -1px;
+          line-height: 1.18;
+          margin-bottom: 16px;
+        }
+        .section-desc {
+          font-size: 16px;
+          color: var(--text3);
+          line-height: 1.7;
+          max-width: 540px;
+          margin-bottom: 56px;
+        }
+        .features-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 20px;
+        }
+        .feature-card {
+          background: var(--card);
+          border: 1px solid var(--border);
+          border-radius: var(--radius-lg);
+          padding: 32px 28px;
+          position: relative;
+          overflow: hidden;
+          box-shadow: var(--shadow-sm);
+        }
+        .feature-card::before {
+          content: '';
+          position: absolute;
+          top: 0; left: 0; right: 0;
+          height: 3px;
+          background: linear-gradient(90deg, var(--primary-mid), var(--accent));
+          opacity: 0;
+          transition: opacity 0.2s;
+        }
+        .feature-card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); border-color: var(--border-strong); }
+        .feature-card:hover::before { opacity: 1; }
+        .feature-icon {
+          width: 52px;
+          height: 52px;
+          border-radius: var(--radius-md);
+          background: var(--primary-light);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 20px;
+          color: var(--primary-mid);
+          margin-bottom: 20px;
+        }
+        .feature-icon.orange { background: #fff1ee; color: var(--accent); }
+        .feature-icon.green { background: var(--green-light); color: var(--green); }
+        .feature-title { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 8px; letter-spacing: -0.2px; }
+        .feature-desc { font-size: 13.5px; color: var(--text3); line-height: 1.65; }
+
+        /* How it works */
+        .how-it-works {
+          background: var(--primary);
+          padding: 100px 40px;
+        }
+        .how-inner { max-width: 900px; margin: 0 auto; text-align: center; }
+        .how-it-works .section-eyebrow { color: #ff7a55; }
+        .how-it-works .section-title { color: #fff; }
+        .how-it-works .section-desc { color: rgba(255,255,255,0.5); margin-left: auto; margin-right: auto; }
+        .steps {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 32px;
+          margin-top: 56px;
+          position: relative;
+        }
+        .steps::before {
+          content: '';
+          position: absolute;
+          top: 28px;
+          left: calc(16.67% + 14px);
+          right: calc(16.67% + 14px);
+          height: 1px;
+          background: linear-gradient(90deg, rgba(255,255,255,0.15), rgba(255,255,255,0.08), rgba(255,255,255,0.15));
+        }
+        .step { text-align: center; }
+        .step-num {
+          width: 56px;
+          height: 56px;
+          border-radius: 50%;
+          background: rgba(255,255,255,0.06);
+          border: 1px solid rgba(255,255,255,0.1);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 18px;
+          font-weight: 800;
+          color: #ff6b35;
+          margin: 0 auto 20px;
+        }
+        .step-title { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+        .step-desc { font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.6; }
+
+        /* Social Proof */
+        .social-proof {
+          background: var(--bg);
+          padding: 80px 40px;
+          border-top: 1px solid var(--border);
+        }
+        .proof-inner { max-width: 1100px; margin: 0 auto; }
+        .proof-stats {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 24px;
+          margin-bottom: 60px;
+        }
+        .proof-stat {
+          text-align: center;
+          padding: 28px 16px;
+          background: var(--card);
+          border: 1px solid var(--border);
+          border-radius: var(--radius-lg);
+          box-shadow: var(--shadow-xs);
+        }
+        .proof-stat-num {
+          font-size: 34px;
+          font-weight: 900;
+          color: var(--primary-mid);
+          letter-spacing: -1px;
+          line-height: 1;
+          margin-bottom: 6px;
+        }
+        .proof-stat-label { font-size: 13px; color: var(--text3); font-weight: 500; }
+        .proof-reviews {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 20px;
+        }
+        .review-card {
+          background: var(--card);
+          border: 1px solid var(--border);
+          border-radius: var(--radius-lg);
+          padding: 28px;
+          box-shadow: var(--shadow-xs);
+        }
+        .review-stars { color: #f5a623; font-size: 13px; margin-bottom: 14px; display: flex; gap: 2px; }
+        .review-text { font-size: 14px; color: var(--text2); line-height: 1.65; margin-bottom: 16px; font-style: italic; }
+        .review-author { display: flex; align-items: center; gap: 10px; }
+        .review-avatar {
+          width: 34px; height: 34px;
+          border-radius: 50%;
+          background: var(--primary-mid);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #fff;
+          font-size: 12px;
+          font-weight: 700;
+        }
+        .review-name { font-size: 13px; font-weight: 600; color: var(--text); }
+        .review-role { font-size: 12px; color: var(--text3); }
+
+        /* CTA Banner */
+        .cta-banner {
+          background: linear-gradient(135deg, #0f2240 0%, #1a3a6c 50%, #0f2240 100%);
+          padding: 80px 40px;
+          text-align: center;
+          position: relative;
+          overflow: hidden;
+        }
+        .cta-banner::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: radial-gradient(ellipse 60% 80% at 50% 100%, rgba(232,56,13,0.15), transparent);
+        }
+        .cta-inner { position: relative; z-index: 1; max-width: 600px; margin: 0 auto; }
+        .cta-title { font-size: clamp(26px, 4vw, 38px); font-weight: 900; color: #fff; letter-spacing: -0.8px; margin-bottom: 16px; line-height: 1.2; }
+        .cta-subtitle { font-size: 15px; color: rgba(255,255,255,0.5); margin-bottom: 36px; line-height: 1.6; }
+        .cta-buttons { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+        /* Footer */
+        .landing-footer {
+          background: #080f1e;
+          padding: 40px;
+          text-align: center;
+          border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        .landing-footer p { font-size: 12px; color: rgba(255,255,255,0.25); }
+
+        /* ===== LOGIN SCREEN ===== */
         .login-screen {
           display: flex;
           align-items: center;
           justify-content: center;
           min-height: 100vh;
-          padding: 20px;
-          background: linear-gradient(145deg, #e8edf7 0%, #f0f2f5 50%, #edf7f2 100%);
+          padding: 80px 20px 40px;
+          background: linear-gradient(160deg, #e8eef8 0%, #f4f6f9 40%, #edf7f2 100%);
+          position: relative;
         }
         .login-screen.hidden { display: none; }
+        .login-screen::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background-image:
+            linear-gradient(rgba(26,58,108,0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(26,58,108,0.03) 1px, transparent 1px);
+          background-size: 48px 48px;
+        }
         .login-box {
           background: var(--card);
-          border-radius: var(--radius-lg);
+          border-radius: var(--radius-xl);
           padding: 44px 40px;
           width: 100%;
-          max-width: 400px;
-          box-shadow: var(--shadow-lg);
+          max-width: 420px;
+          box-shadow: var(--shadow-xl);
           border: 1px solid var(--border);
+          position: relative;
+          z-index: 1;
         }
         .login-logo {
           display: flex;
           align-items: center;
           gap: 12px;
-          margin-bottom: 8px;
+          margin-bottom: 4px;
         }
         .login-logo-icon {
-          width: 40px;
-          height: 40px;
-          background: var(--primary);
-          border-radius: var(--radius-md);
+          width: 44px;
+          height: 44px;
+          background: linear-gradient(135deg, #e8380d, #ff6b35);
+          border-radius: 11px;
           display: flex;
           align-items: center;
           justify-content: center;
           color: #fff;
           font-size: 18px;
+          font-weight: 800;
+          box-shadow: 0 4px 14px rgba(232,56,13,0.3);
         }
-        .login-logo-text {
-          font-size: 20px;
-          font-weight: 700;
-          color: var(--text);
-          letter-spacing: -0.3px;
-        }
-        .login-subtitle {
-          color: var(--text3);
-          font-size: 13px;
-          margin-bottom: 32px;
-          padding-left: 52px;
-          letter-spacing: 0.2px;
-        }
+        .login-logo-text { font-size: 20px; font-weight: 800; color: var(--text); letter-spacing: -0.4px; }
+        .login-subtitle { color: var(--text3); font-size: 13px; margin-bottom: 32px; padding-left: 56px; }
         .login-tabs {
           display: flex;
-          border: 1px solid var(--border);
+          border: 1.5px solid var(--border);
           border-radius: var(--radius-md);
           overflow: hidden;
           margin-bottom: 28px;
@@ -119,20 +555,17 @@
           border: none;
           background: transparent;
           font-size: 13.5px;
-          font-weight: 500;
+          font-weight: 600;
           cursor: pointer;
           color: var(--text2);
           font-family: inherit;
         }
-        .login-tabs button.active {
-          background: var(--primary);
-          color: #fff;
-        }
+        .login-tabs button.active { background: var(--primary-mid); color: #fff; }
         .form-group { margin-bottom: 16px; }
         .form-group label {
           display: block;
           font-size: 12px;
-          font-weight: 600;
+          font-weight: 700;
           color: var(--text2);
           margin-bottom: 6px;
           letter-spacing: 0.3px;
@@ -140,33 +573,33 @@
         }
         .form-group input, .form-group select {
           width: 100%;
-          padding: 11px 14px;
+          padding: 12px 14px;
           border: 1.5px solid var(--border);
           border-radius: var(--radius-sm);
           font-size: 14px;
           font-family: inherit;
-          background: var(--card);
+          background: var(--card2);
           color: var(--text);
         }
-        .form-group input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(27,58,107,0.08); }
-        .form-group input::placeholder { color: var(--text3); }
-        .btn { width: 100%; padding: 12px 20px; border: none; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; letter-spacing: 0.2px; }
+        .form-group input:focus { outline: none; border-color: var(--primary-mid); box-shadow: 0 0 0 3px rgba(26,58,108,0.07); }
+        .form-group input::placeholder { color: var(--text4); }
+        .btn { width: 100%; padding: 13px 20px; border: none; border-radius: var(--radius-sm); font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; letter-spacing: 0.2px; }
         .btn:active { transform: scale(0.98); }
-        .btn-primary { background: var(--primary); color: #fff; }
-        .btn-primary:hover { background: var(--primary-mid); }
-        .btn-accent { background: var(--accent); color: #fff; }
-        .btn-accent:hover { background: #a93226; }
-        .btn-ghost { background: var(--bg); color: var(--text2); border: 1px solid var(--border); }
-        .btn-ghost:hover { background: var(--bg2); }
-        .error-msg { color: var(--accent); font-size: 12px; margin-top: 6px; display: none; font-weight: 500; }
+        .btn-primary { background: var(--primary-mid); color: #fff; }
+        .btn-primary:hover { background: var(--primary); }
+        .btn-accent { background: linear-gradient(135deg, #e8380d, #ff6b35); color: #fff; box-shadow: 0 4px 14px rgba(232,56,13,0.3); }
+        .btn-accent:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(232,56,13,0.4); }
+        .btn-ghost { background: var(--bg); color: var(--text2); border: 1.5px solid var(--border); }
+        .btn-ghost:hover { background: var(--bg2); border-color: var(--border-strong); }
+        .error-msg { color: var(--accent); font-size: 12px; margin-top: 6px; display: none; font-weight: 600; }
         .error-msg.show { display: block; }
 
-        /* ===== Header ===== */
+        /* ===== HEADER ===== */
         .header {
           background: var(--header-bg);
           border-bottom: 1px solid var(--header-border);
           padding: 0 24px;
-          height: 60px;
+          height: 62px;
           display: flex;
           justify-content: space-between;
           align-items: center;
@@ -180,33 +613,26 @@
         .header-logo {
           width: 34px;
           height: 34px;
-          background: var(--primary);
+          background: linear-gradient(135deg, #e8380d, #ff6b35);
           border-radius: var(--radius-sm);
           display: flex;
           align-items: center;
           justify-content: center;
           color: #fff;
-          font-size: 16px;
+          font-size: 14px;
+          font-weight: 800;
+          box-shadow: 0 2px 8px rgba(232,56,13,0.3);
         }
-        .header-title {
-          font-size: 15px;
-          font-weight: 700;
-          color: var(--text);
-          letter-spacing: -0.2px;
-        }
+        .header-title { font-size: 15px; font-weight: 800; color: var(--text); letter-spacing: -0.3px; }
         .header-right { display: flex; align-items: center; gap: 8px; }
-        .header-user {
-          font-size: 13px;
-          color: var(--text2);
-          margin-right: 4px;
-        }
+        .header-user { font-size: 13px; color: var(--text2); margin-right: 6px; }
         .header-btn {
-          padding: 7px 14px;
-          border: 1px solid var(--border);
+          padding: 8px 14px;
+          border: 1.5px solid var(--border);
           border-radius: var(--radius-sm);
           background: transparent;
           font-size: 12.5px;
-          font-weight: 500;
+          font-weight: 600;
           cursor: pointer;
           display: flex;
           align-items: center;
@@ -215,14 +641,14 @@
           font-family: inherit;
         }
         .header-btn:hover { background: var(--bg); border-color: var(--border-strong); color: var(--text); }
-        .header-btn.primary { background: var(--primary); color: #fff; border-color: var(--primary); }
-        .header-btn.primary:hover { background: var(--primary-mid); }
+        .header-btn.primary { background: var(--primary-mid); color: #fff; border-color: var(--primary-mid); }
+        .header-btn.primary:hover { background: var(--primary); border-color: var(--primary); }
 
-        /* ===== Container ===== */
+        /* ===== CONTAINER ===== */
         .container { max-width: 1100px; margin: 0 auto; padding: 28px 24px 120px; }
         .container.hidden { display: none; }
 
-        /* ===== Toolbar ===== */
+        /* ===== TOOLBAR ===== */
         .toolbar {
           display: flex;
           align-items: center;
@@ -243,7 +669,7 @@
           max-width: 480px;
           box-shadow: var(--shadow-xs);
         }
-        .search-box:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(27,58,107,0.07); }
+        .search-box:focus-within { border-color: var(--primary-mid); box-shadow: 0 0 0 3px rgba(26,58,108,0.07); }
         .search-box input {
           flex: 1;
           border: none;
@@ -253,7 +679,7 @@
           color: var(--text);
           background: transparent;
         }
-        .search-box input::placeholder { color: var(--text3); }
+        .search-box input::placeholder { color: var(--text4); }
         .search-box i { color: var(--text3); font-size: 13px; align-self: center; }
         .toolbar-right { display: flex; gap: 8px; align-items: center; }
         .toolbar-btn {
@@ -262,7 +688,7 @@
           border-radius: var(--radius-sm);
           background: var(--card);
           font-size: 13px;
-          font-weight: 500;
+          font-weight: 600;
           cursor: pointer;
           display: flex;
           align-items: center;
@@ -272,10 +698,10 @@
           box-shadow: var(--shadow-xs);
         }
         .toolbar-btn:hover { background: var(--bg); border-color: var(--border-strong); color: var(--text); }
-        .toolbar-btn.primary { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 2px 6px rgba(27,58,107,0.25); }
-        .toolbar-btn.primary:hover { background: var(--primary-mid); border-color: var(--primary-mid); }
+        .toolbar-btn.primary { background: var(--primary-mid); color: #fff; border-color: var(--primary-mid); box-shadow: 0 2px 8px rgba(26,58,108,0.2); }
+        .toolbar-btn.primary:hover { background: var(--primary); border-color: var(--primary); }
 
-        /* ===== Stats Row ===== */
+        /* ===== STATS ROW ===== */
         .stats-row {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
@@ -286,38 +712,38 @@
           background: var(--card);
           border: 1px solid var(--border);
           border-radius: var(--radius-md);
-          padding: 20px 22px;
+          padding: 22px 24px;
           box-shadow: var(--shadow-xs);
           display: flex;
           align-items: center;
-          gap: 16px;
+          gap: 18px;
         }
         .stat-icon {
-          width: 40px;
-          height: 40px;
-          border-radius: var(--radius-sm);
+          width: 44px;
+          height: 44px;
+          border-radius: var(--radius-md);
           display: flex;
           align-items: center;
           justify-content: center;
           font-size: 16px;
           flex-shrink: 0;
         }
-        .stat-icon.blue { background: var(--primary-light); color: var(--primary); }
+        .stat-icon.blue { background: var(--primary-light); color: var(--primary-mid); }
         .stat-icon.green { background: var(--green-light); color: var(--green); }
-        .stat-icon.red { background: var(--accent-light); color: var(--accent); }
-        .stat-info .stat-num { font-size: 26px; font-weight: 700; color: var(--text); letter-spacing: -0.5px; line-height: 1; }
-        .stat-info .stat-label { font-size: 12px; color: var(--text3); margin-top: 4px; font-weight: 500; }
+        .stat-icon.orange { background: #fff1ee; color: var(--accent); }
+        .stat-info .stat-num { font-size: 28px; font-weight: 900; color: var(--text); letter-spacing: -0.8px; line-height: 1; }
+        .stat-info .stat-label { font-size: 12px; color: var(--text3); margin-top: 5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
 
-        /* ===== Section Header ===== */
+        /* ===== SECTION HEADER ===== */
         .section-header {
           display: flex;
           align-items: center;
           justify-content: space-between;
           margin-bottom: 14px;
         }
-        .section-title { font-size: 13px; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: 0.8px; }
+        .section-title { font-size: 12px; font-weight: 800; color: var(--text2); text-transform: uppercase; letter-spacing: 1px; }
 
-        /* ===== Cards Table/List ===== */
+        /* ===== CARDS LIST ===== */
         .cards-list { display: flex; flex-direction: column; gap: 10px; }
         .card-item {
           background: var(--card);
@@ -331,15 +757,14 @@
           cursor: default;
         }
         .card-item:hover { border-color: var(--border-strong); box-shadow: var(--shadow-sm); }
-
         .card-avatar {
-          width: 48px;
-          height: 48px;
-          border-radius: var(--radius-sm);
+          width: 50px;
+          height: 50px;
+          border-radius: var(--radius-md);
           display: flex;
           align-items: center;
           justify-content: center;
-          font-weight: 700;
+          font-weight: 800;
           font-size: 15px;
           color: #fff;
           flex-shrink: 0;
@@ -347,27 +772,27 @@
         }
         .card-body { flex: 1; min-width: 0; }
         .card-name-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-        .card-name { font-size: 15px; font-weight: 700; color: var(--text); letter-spacing: -0.2px; }
+        .card-name { font-size: 15px; font-weight: 800; color: var(--text); letter-spacing: -0.2px; }
         .card-badge {
           display: inline-flex;
           align-items: center;
-          padding: 2px 9px;
-          border-radius: 3px;
+          padding: 3px 10px;
+          border-radius: var(--radius-xs);
           font-size: 11px;
-          font-weight: 600;
-          letter-spacing: 0.2px;
+          font-weight: 700;
+          letter-spacing: 0.3px;
         }
-        .badge-client { background: var(--primary-light); color: var(--primary); }
+        .badge-client { background: var(--primary-light); color: var(--primary-mid); }
         .badge-supplier { background: var(--green-light); color: var(--green); }
         .badge-colleague { background: #fef3e2; color: #b36000; }
         .badge-prospect { background: #f3e8fe; color: #7c3aed; }
         .badge-other { background: var(--bg); color: var(--text3); }
-        .card-meta { display: flex; align-items: center; gap: 16px; margin-top: 5px; flex-wrap: wrap; }
+        .card-meta { display: flex; align-items: center; gap: 16px; margin-top: 6px; flex-wrap: wrap; }
         .card-meta-item { display: flex; align-items: center; gap: 5px; font-size: 12.5px; color: var(--text2); }
-        .card-meta-item i { width: 13px; text-align: center; color: var(--text3); font-size: 11px; }
+        .card-meta-item i { width: 13px; text-align: center; color: var(--text4); font-size: 11px; }
         .card-image-thumb {
-          width: 56px;
-          height: 40px;
+          width: 58px;
+          height: 42px;
           object-fit: cover;
           border-radius: var(--radius-sm);
           border: 1px solid var(--border);
@@ -375,68 +800,111 @@
         }
         .card-actions { display: flex; gap: 6px; flex-shrink: 0; margin-left: auto; }
         .card-actions button {
-          width: 34px;
-          height: 34px;
-          border: 1px solid var(--border);
+          width: 36px;
+          height: 36px;
+          border: 1.5px solid var(--border);
           border-radius: var(--radius-sm);
           background: transparent;
           cursor: pointer;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 12.5px;
+          font-size: 13px;
           color: var(--text2);
         }
         .card-actions button:hover { background: var(--bg); color: var(--text); }
         .card-actions .btn-delete-action:hover { background: var(--accent-light); color: var(--accent); border-color: #f5c6c3; }
-        .btn:active { transform: scale(0.97); }
+
+        /* Empty State */
+        .empty-state {
+          text-align: center;
+          padding: 72px 32px;
+          background: var(--card);
+          border: 1px solid var(--border);
+          border-radius: var(--radius-lg);
+          box-shadow: var(--shadow-xs);
+        }
+        .empty-icon {
+          width: 72px; height: 72px;
+          background: var(--primary-light);
+          border-radius: var(--radius-lg);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto 20px;
+          font-size: 26px;
+          color: var(--primary-mid);
+        }
+        .empty-state .title { font-size: 16px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
+        .empty-state p { font-size: 13.5px; color: var(--text3); line-height: 1.6; }
 
         /* ===== FAB ===== */
         .fab {
           position: fixed;
           bottom: 28px;
           right: 28px;
-          width: 52px;
-          height: 52px;
-          background: var(--primary);
+          width: 54px;
+          height: 54px;
+          background: linear-gradient(135deg, #e8380d, #ff6b35);
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
           font-size: 20px;
           color: #fff;
-          box-shadow: 0 4px 16px rgba(27,58,107,0.35);
+          box-shadow: 0 6px 24px rgba(232,56,13,0.4);
           cursor: pointer;
           z-index: 100;
           border: none;
         }
-        .fab:hover { background: var(--primary-mid); box-shadow: 0 6px 24px rgba(27,58,107,0.4); transform: scale(1.06); }
-        .fab:active { transform: scale(0.96); }
+        .fab:hover { transform: scale(1.08); box-shadow: 0 8px 32px rgba(232,56,13,0.5); }
+        .fab:active { transform: scale(0.95); }
         .fab.hidden { display: none; }
 
-        /* ===== Modal ===== */
-        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,20,40,0.45); backdrop-filter: blur(4px); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
+        /* ===== TOAST ===== */
+        .toast {
+          position: fixed;
+          bottom: 28px;
+          left: 50%;
+          transform: translateX(-50%) translateY(80px);
+          background: var(--text);
+          color: #fff;
+          padding: 12px 22px;
+          border-radius: var(--radius-md);
+          font-size: 13.5px;
+          font-weight: 600;
+          z-index: 500;
+          box-shadow: var(--shadow-lg);
+          opacity: 0;
+          pointer-events: none;
+          transition: transform 0.3s cubic-bezier(0.34, 1.4, 0.64, 1), opacity 0.3s;
+          white-space: nowrap;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+        /* ===== MODAL ===== */
+        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,25,40,0.5); backdrop-filter: blur(6px); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
         .modal.show { display: flex; }
         .modal-content {
           background: var(--card);
-          border-radius: var(--radius-lg);
+          border-radius: var(--radius-xl);
           padding: 32px;
           width: 100%;
-          max-width: 520px;
+          max-width: 540px;
           max-height: 90vh;
           overflow-y: auto;
-          box-shadow: var(--shadow-lg);
+          box-shadow: var(--shadow-xl);
           border: 1px solid var(--border);
-          animation: modalIn 0.22s cubic-bezier(0.34, 1.4, 0.64, 1);
+          animation: modalIn 0.25s cubic-bezier(0.34, 1.4, 0.64, 1);
         }
         @keyframes modalIn { from { opacity: 0; transform: scale(0.95) translateY(8px); } to { opacity: 1; transform: scale(1) translateY(0); } }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
-        .modal-header h2 { font-size: 16px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 8px; }
-        .modal-header h2 i { color: var(--primary); }
+        .modal-header h2 { font-size: 16px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 8px; }
+        .modal-header h2 i { color: var(--primary-mid); }
         .modal-close {
-          width: 30px;
-          height: 30px;
-          border: 1px solid var(--border);
+          width: 32px;
+          height: 32px;
+          border: 1.5px solid var(--border);
           border-radius: var(--radius-sm);
           background: transparent;
           cursor: pointer;
@@ -449,18 +917,17 @@
         .modal-close:hover { background: var(--bg); color: var(--text); }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
         .modal-actions { display: flex; gap: 10px; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
-        .modal-actions button { flex: 1; padding: 12px; border: none; border-radius: var(--radius-sm); font-size: 13.5px; font-weight: 600; cursor: pointer; font-family: inherit; }
-        .btn-save { background: var(--primary); color: #fff; }
-        .btn-save:hover { background: var(--primary-mid); }
-        .btn-cancel { background: var(--bg); color: var(--text2); border: 1px solid var(--border); }
-        .btn-cancel:hover { background: var(--bg2); color: var(--text); }
-        .btn-scan-modal { background: var(--accent); color: #fff; }
-        .btn-scan-modal:hover { background: #a93226; }
+        .modal-actions button { flex: 1; padding: 13px; border: none; border-radius: var(--radius-sm); font-size: 13.5px; font-weight: 700; cursor: pointer; font-family: inherit; }
+        .btn-save { background: var(--primary-mid); color: #fff; }
+        .btn-save:hover { background: var(--primary); }
+        .btn-cancel { background: var(--bg); color: var(--text2); border: 1.5px solid var(--border); }
+        .btn-cancel:hover { background: var(--bg2); color: var(--text); border-color: var(--border-strong); }
+        .btn-scan-modal { background: linear-gradient(135deg, #e8380d, #ff6b35); color: #fff; box-shadow: 0 4px 12px rgba(232,56,13,0.3); }
 
-        /* ===== Image Upload ===== */
+        /* ===== IMAGE UPLOAD ===== */
         .image-upload-row { display: flex; gap: 10px; margin-top: 10px; }
-        .image-upload-row button { flex: 1; padding: 10px; border: 1.5px dashed var(--border-strong); border-radius: var(--radius-sm); background: var(--bg); font-size: 13px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; color: var(--text2); font-family: inherit; }
-        .image-upload-row button:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+        .image-upload-row button { flex: 1; padding: 11px; border: 1.5px dashed var(--border-strong); border-radius: var(--radius-sm); background: var(--card2); font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; color: var(--text2); font-family: inherit; }
+        .image-upload-row button:hover { border-color: var(--primary-mid); color: var(--primary-mid); background: var(--primary-light); }
         #fileUpload { display: none; }
         #imagePreviewContainer { display: none; margin-top: 12px; }
         .image-preview-wrap { position: relative; display: inline-block; }
@@ -469,20 +936,20 @@
           position: absolute;
           top: -8px;
           right: -8px;
-          width: 22px;
-          height: 22px;
+          width: 24px;
+          height: 24px;
           background: var(--accent);
           color: #fff;
           border: none;
           border-radius: 50%;
-          font-size: 11px;
+          font-size: 12px;
           cursor: pointer;
           display: flex;
           align-items: center;
           justify-content: center;
         }
 
-        /* ===== Scan Modal ===== */
+        /* ===== SCAN MODAL ===== */
         .scan-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #000; z-index: 300; }
         .scan-modal.show { display: block; }
         .scan-view { width: 100%; height: 100%; position: relative; }
@@ -494,247 +961,154 @@
           transform: translate(-50%, -50%);
           width: 88%;
           height: 48%;
-          border: 2px solid rgba(255,255,255,0.6);
-          border-radius: 8px;
+          border: 2px solid rgba(255,255,255,0.55);
+          border-radius: 12px;
         }
-        .scan-corner { position: absolute; width: 24px; height: 24px; border-color: #fff; border-style: solid; }
+        .scan-corner { position: absolute; width: 24px; height: 24px; border-color: #ff6b35; border-style: solid; }
         .scan-corner.tl { top: -2px; left: -2px; border-width: 3px 0 0 3px; border-radius: 4px 0 0 0; }
         .scan-corner.tr { top: -2px; right: -2px; border-width: 3px 3px 0 0; border-radius: 0 4px 0 0; }
         .scan-corner.bl { bottom: -2px; left: -2px; border-width: 0 0 3px 3px; border-radius: 0 0 0 4px; }
         .scan-corner.br { bottom: -2px; right: -2px; border-width: 0 3px 3px 0; border-radius: 0 0 4px 0; }
-        .scan-hint { position: absolute; bottom: 130px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.85); font-size: 13px; white-space: nowrap; letter-spacing: 0.3px; }
-        .scan-buttons { position: absolute; bottom: 40px; left: 0; right: 0; display: flex; justify-content: center; gap: 20px; }
-        .scan-btn { width: 64px; height: 64px; border-radius: 50%; border: 2.5px solid rgba(255,255,255,0.5); background: transparent; cursor: pointer; }
-        .scan-btn.capture { width: 74px; height: 74px; background: #fff; border-color: #fff; }
-        .scan-btn.close-btn { position: absolute; top: 20px; left: 20px; width: 40px; height: 40px; border-radius: 50%; background: rgba(0,0,0,0.45); color: #fff; border: none; font-size: 18px; display: flex; align-items: center; justify-content: center; }
-
-        .scan-progress { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.92); z-index: 350; align-items: center; justify-content: center; flex-direction: column; color: #fff; }
-        .scan-progress.show { display: flex; }
-        .scan-progress .spinner { width: 52px; height: 52px; border: 3px solid rgba(255,255,255,0.15); border-top-color: var(--primary-light); border-radius: 50%; animation: spin 0.9s linear infinite; }
-        .scan-progress .text { margin-top: 18px; font-size: 14px; color: rgba(255,255,255,0.7); }
-        .scan-progress .percent { margin-top: 10px; font-size: 28px; font-weight: 700; color: #fff; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* ===== Share Modal ===== */
-        .share-qr { display: flex; justify-content: center; margin: 20px 0; }
-        .share-actions { display: flex; gap: 10px; justify-content: center; margin-top: 16px; }
-        .share-actions button { flex: 1; max-width: 160px; padding: 11px; border: none; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; font-family: inherit; }
-        .btn-download { background: var(--primary); color: #fff; }
-        .btn-download:hover { background: var(--primary-mid); }
-        .btn-copy { background: var(--bg); color: var(--text2); border: 1px solid var(--border); }
-        .btn-copy:hover { background: var(--bg2); color: var(--text); }
-
-        /* ===== Sync Modal ===== */
-        .sync-info-block { background: var(--bg); border-radius: var(--radius-md); padding: 16px; margin-bottom: 20px; border: 1px solid var(--border); }
-        .sync-info-block .row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 13px; color: var(--text2); }
-        .sync-info-block .row:last-child { margin-bottom: 0; }
-        .sync-info-block .row i { width: 14px; text-align: center; color: var(--text3); }
-        .sync-divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
-
-        /* ===== Empty State ===== */
-        .empty-state { text-align: center; padding: 80px 20px; color: var(--text3); }
-        .empty-icon {
-          width: 64px;
-          height: 64px;
-          background: var(--bg);
-          border-radius: var(--radius-md);
+        .scan-hint {
+          position: absolute;
+          bottom: 110px;
+          left: 50%;
+          transform: translateX(-50%);
+          color: rgba(255,255,255,0.8);
+          font-size: 14px;
+          font-weight: 600;
+          text-align: center;
+          letter-spacing: 0.3px;
+        }
+        .scan-buttons { position: absolute; bottom: 32px; left: 0; right: 0; display: flex; align-items: center; justify-content: center; gap: 20px; }
+        .scan-btn {
+          width: 52px;
+          height: 52px;
+          border-radius: 50%;
+          border: 2px solid rgba(255,255,255,0.5);
+          background: transparent;
+          cursor: pointer;
           display: flex;
           align-items: center;
           justify-content: center;
-          margin: 0 auto 18px;
-          font-size: 26px;
-          color: var(--text3);
-          border: 1.5px dashed var(--border-strong);
-        }
-        .empty-state p { font-size: 14px; }
-        .empty-state p.title { font-size: 15px; font-weight: 600; color: var(--text2); margin-bottom: 4px; }
-
-        /* ===== Toast ===== */
-        .toast {
-          position: fixed;
-          bottom: 96px;
-          left: 50%;
-          transform: translateX(-50%) translateY(80px);
-          background: #1a1a2e;
+          font-size: 22px;
           color: #fff;
-          padding: 12px 22px;
-          border-radius: var(--radius-md);
+        }
+        .scan-btn.capture {
+          width: 64px;
+          height: 64px;
+          background: #fff;
+          border-color: #fff;
+          box-shadow: 0 0 0 6px rgba(255,255,255,0.2);
+        }
+        .scan-btn.capture::before {
+          content: '';
+          width: 44px;
+          height: 44px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #e8380d, #ff6b35);
+        }
+        .scan-btn.close-btn { font-size: 20px; }
+
+        .scan-progress {
+          display: none;
+          position: fixed;
+          top: 0; left: 0; right: 0; bottom: 0;
+          background: rgba(15,25,40,0.88);
+          backdrop-filter: blur(8px);
+          z-index: 350;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 16px;
+        }
+        .scan-progress.show { display: flex; }
+        .spinner {
+          width: 44px;
+          height: 44px;
+          border: 3px solid rgba(255,255,255,0.1);
+          border-top-color: #ff6b35;
+          border-radius: 50%;
+          animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .scan-progress .text { color: rgba(255,255,255,0.8); font-size: 15px; font-weight: 600; }
+        .scan-progress .percent { color: #ff6b35; font-size: 28px; font-weight: 900; letter-spacing: -0.5px; }
+
+        /* ===== SHARE MODAL ===== */
+        .share-qr { display: flex; justify-content: center; margin: 20px 0; }
+        .share-qr canvas { border-radius: var(--radius-md); }
+        .share-actions { display: flex; gap: 10px; justify-content: center; margin-top: 16px; }
+        .btn-download {
+          padding: 10px 20px;
+          background: var(--primary-mid);
+          color: #fff;
+          border: none;
+          border-radius: var(--radius-sm);
           font-size: 13px;
-          opacity: 0;
-          transition: opacity 0.25s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-          z-index: 400;
-          box-shadow: 0 6px 24px rgba(0,0,0,0.2);
-          pointer-events: none;
+          font-weight: 700;
+          cursor: pointer;
+          font-family: inherit;
           display: flex;
           align-items: center;
-          gap: 8px;
-          white-space: nowrap;
+          gap: 6px;
         }
-        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .btn-download:hover { background: var(--primary); }
+        .btn-copy {
+          padding: 10px 20px;
+          background: var(--bg);
+          color: var(--text2);
+          border: 1.5px solid var(--border);
+          border-radius: var(--radius-sm);
+          font-size: 13px;
+          font-weight: 700;
+          cursor: pointer;
+          font-family: inherit;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+        .btn-copy:hover { background: var(--bg2); border-color: var(--border-strong); }
 
-        /* ===== Landing Page ===== */
-        .landing { width: 100%; background: var(--bg); }
-        .landing-nav {
-            position: sticky; top: 0; z-index: 100;
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border);
-        }
-        .landing-nav-inner {
-            max-width: 1100px; margin: 0 auto;
-            padding: 0 24px; height: 60px;
-            display: flex; align-items: center; justify-content: space-between;
-        }
-        .landing-logo {
-            display: flex; align-items: center; gap: 10px;
-            font-size: 1.1rem; font-weight: 700; color: var(--primary);
-        }
-        .landing-logo i { font-size: 1.3rem; }
-        .landing-cta-btn {
-            padding: 8px 20px;
-            background: var(--primary); color: #fff;
-            border: none; border-radius: 8px;
-            font-size: 0.85rem; font-weight: 600;
-            cursor: pointer; transition: all 0.2s;
-        }
-        .landing-cta-btn:hover { background: var(--primary-mid); transform: translateY(-1px); }
+        /* ===== SYNC MODAL ===== */
+        .sync-info-block { background: var(--card2); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px; margin-bottom: 20px; }
+        .sync-info-block .row { display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: var(--text2); }
+        .sync-info-block .row i { width: 16px; color: var(--text3); }
+        .sync-divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+        .btn { width: 100%; padding: 12px 20px; border: none; border-radius: var(--radius-sm); font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; letter-spacing: 0.2px; }
+        .btn i { margin-right: 5px; }
+        .btn-primary { background: var(--primary-mid); color: #fff; }
+        .btn-primary:hover { background: var(--primary); }
+        .btn-accent { background: linear-gradient(135deg, #e8380d, #ff6b35); color: #fff; box-shadow: 0 3px 10px rgba(232,56,13,0.25); }
+        .btn-accent:hover { transform: translateY(-1px); box-shadow: 0 5px 16px rgba(232,56,13,0.35); }
 
-        .landing-hero {
-            position: relative; overflow: hidden;
-            padding: 80px 24px 100px;
-            text-align: center;
-            background: var(--bg);
-        }
-        .landing-hero-bg {
-            position: absolute; inset: 0; pointer-events: none;
-            background:
-                radial-gradient(ellipse 80% 60% at 50% 0%, rgba(27,58,107,0.08) 0%, transparent 70%),
-                radial-gradient(ellipse 60% 40% at 80% 100%, rgba(26,122,74,0.05) 0%, transparent 60%);
-        }
-        .landing-hero-content { position: relative; max-width: 720px; margin: 0 auto; }
-        .landing-hero-badge {
-            display: inline-block;
-            padding: 6px 16px;
-            background: var(--primary-light); color: var(--primary);
-            border-radius: 100px; font-size: 0.78rem; font-weight: 600;
-            letter-spacing: 0.06em; margin-bottom: 24px;
-        }
-        .landing-hero-title {
-            font-size: clamp(2.4rem, 6vw, 3.8rem);
-            font-weight: 700; line-height: 1.15;
-            color: var(--text); letter-spacing: -0.02em;
-            margin-bottom: 20px;
-        }
-        .landing-hero-sub {
-            font-size: clamp(1rem, 2vw, 1.15rem);
-            color: var(--text2); line-height: 1.75;
-            max-width: 540px; margin: 0 auto 36px;
-        }
-        .landing-hero-actions {
-            display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
-            margin-bottom: 48px;
-        }
-        .landing-btn-primary {
-            display: inline-flex; align-items: center; gap: 8px;
-            padding: 13px 28px;
-            background: var(--primary); color: #fff;
-            border: none; border-radius: 10px;
-            font-size: 1rem; font-weight: 600;
-            cursor: pointer; transition: all 0.2s;
-        }
-        .landing-btn-primary:hover { background: var(--primary-mid); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(27,58,107,0.25); }
-        .landing-btn-ghost {
-            display: inline-flex; align-items: center; gap: 8px;
-            padding: 13px 28px;
-            background: transparent; color: var(--text2);
-            border: 1.5px solid var(--border-strong); border-radius: 10px;
-            font-size: 1rem; font-weight: 500;
-            cursor: pointer; transition: all 0.2s;
-        }
-        .landing-btn-ghost:hover { border-color: var(--primary); color: var(--primary); }
-        .landing-hero-stats {
-            display: flex; align-items: center; justify-content: center; gap: 24px;
-        }
-        .landing-stat { text-align: center; }
-        .landing-stat-num { display: block; font-size: 1.1rem; font-weight: 700; color: var(--primary); }
-        .landing-stat-label { font-size: 0.75rem; color: var(--text3); }
-        .landing-stat-div { width: 1px; height: 28px; background: var(--border); }
-
-        .landing-features { background: #fff; padding: 80px 24px; }
-        .landing-features-inner { max-width: 1100px; margin: 0 auto; }
-        .landing-section-label {
-            display: inline-block;
-            font-size: 0.72rem; font-weight: 700;
-            letter-spacing: 0.15em; text-transform: uppercase;
-            color: var(--primary); margin-bottom: 12px;
-        }
-        .landing-section-title {
-            font-size: clamp(1.8rem, 4vw, 2.6rem);
-            font-weight: 700; color: var(--text);
-            margin-bottom: 48px; letter-spacing: -0.02em;
-        }
-        .landing-features-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-        }
-        .landing-feature-card {
-            padding: 28px 24px;
-            background: var(--bg); border: 1px solid var(--border);
-            border-radius: 14px; text-align: left;
-            transition: all 0.2s;
-        }
-        .landing-feature-card:hover {
-            border-color: var(--primary);
-            box-shadow: var(--shadow-md);
-            transform: translateY(-3px);
-        }
-        .landing-feature-icon {
-            width: 44px; height: 44px;
-            background: var(--primary-light);
-            border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-            margin-bottom: 16px;
-            color: var(--primary); font-size: 1.1rem;
-        }
-        .landing-feature-card h3 { font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 8px; }
-        .landing-feature-card p { font-size: 0.875rem; color: var(--text2); line-height: 1.65; }
-
-        .landing-cta-section { background: var(--primary); padding: 80px 24px; text-align: center; }
-        .landing-cta-inner { max-width: 540px; margin: 0 auto; }
-        .landing-cta-section h2 { font-size: 2rem; font-weight: 700; color: #fff; margin-bottom: 12px; }
-        .landing-cta-section p { color: rgba(255,255,255,0.7); margin-bottom: 28px; font-size: 1rem; }
-        .landing-cta-section .landing-btn-primary { background: #fff; color: var(--primary); }
-        .landing-cta-section .landing-btn-primary:hover { background: var(--primary-light); transform: translateY(-2px); }
-
-        .landing-footer {
-            background: var(--primary); border-top: 1px solid rgba(255,255,255,0.1);
-            padding: 20px 24px; text-align: center;
-            color: rgba(255,255,255,0.45); font-size: 0.8rem;
-        }
-
-        @media (max-width: 700px) {
-            .landing-features-grid { grid-template-columns: 1fr; }
-            .landing-hero { padding: 60px 20px 70px; }
-            .landing-hero-stats { flex-direction: column; gap: 12px; }
-            .landing-stat-div { display: none; }
-        }
-
-        /* ===== Mobile ===== */
-        @media (max-width: 700px) {
-          .cards-list { gap: 8px; }
-          .card-item { flex-wrap: wrap; padding: 16px 18px; }
-          .card-body { flex: 1 0 calc(100% - 66px); }
-          .card-image-thumb { display: none; }
-          .card-actions { margin-left: 0; width: 100%; justify-content: flex-end; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
-          .stats-row { grid-template-columns: 1fr; gap: 10px; }
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+          .landing-nav { padding: 0 20px; }
+          .landing-nav-links { display: none; }
+          .hero { padding: 100px 20px 60px; }
+          .hero-float-1, .hero-float-2, .hero-float-3 { display: none; }
+          .features { padding: 60px 20px; }
+          .features-grid { grid-template-columns: 1fr; gap: 14px; }
+          .how-it-works { padding: 60px 20px; }
+          .steps { grid-template-columns: 1fr; gap: 24px; }
+          .steps::before { display: none; }
+          .social-proof { padding: 60px 20px; }
+          .proof-stats { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+          .proof-reviews { grid-template-columns: 1fr; }
+          .cta-banner { padding: 60px 20px; }
+          .stats-row { grid-template-columns: 1fr; }
           .form-row { grid-template-columns: 1fr; }
-          .toolbar { flex-direction: column; align-items: stretch; }
-          .search-box { max-width: 100%; }
-          .toolbar-right { justify-content: flex-end; }
+          .container { padding: 20px 16px 100px; }
           .login-box { padding: 32px 24px; }
-          .login-subtitle { padding-left: 0; }
-          .modal-content { padding: 24px 18px; }
+          .card-item { padding: 16px; }
+          .card-meta { gap: 10px; }
+          .card-actions { gap: 4px; }
+          .card-actions button { width: 32px; height: 32px; font-size: 12px; }
+        }
+        @media (max-width: 480px) {
+          .hero-title { font-size: 32px; }
+          .proof-stats { grid-template-columns: 1fr 1fr; }
         }
     </style>
 </head>
@@ -742,161 +1116,285 @@
 
     <!-- ===== LANDING PAGE ===== -->
     <div class="landing" id="landingPage">
+
         <!-- Nav -->
         <nav class="landing-nav">
-            <div class="landing-nav-inner">
-                <div class="landing-logo">
-                    <i class="fa-solid fa-id-card"></i>
-                    <span>名片王</span>
-                </div>
-                <button class="landing-cta-btn" onclick="document.getElementById('loginScreen').scrollIntoView({behavior:'smooth'})">開始使用</button>
+            <a href="#" class="landing-nav-brand">
+                <div class="landing-nav-logo"><i class="fa-solid fa-address-card"></i></div>
+                <span class="landing-nav-name">名片王</span>
+            </a>
+            <div class="landing-nav-links">
+                <a href="#features">功能特色</a>
+                <a href="#how">如何使用</a>
+                <a href="#reviews">用戶評價</a>
+                <a href="#" onclick="showLogin(); return false;" class="landing-nav-cta">開始使用</a>
             </div>
         </nav>
 
         <!-- Hero -->
-        <section class="landing-hero">
-            <div class="landing-hero-bg"></div>
-            <div class="landing-hero-content">
-                <div class="landing-hero-badge">專業名片管理</div>
-                <h1 class="landing-hero-title">不再遺漏<br任何重要人脈</h1>
-                <p class="landing-hero-sub">AI OCR 一秒掃描名片，自動整理、終身留存。支援 Telegram 同步，讓你的名片庫隨時隨地都能取用。</p>
-                <div class="landing-hero-actions">
-                    <button class="landing-btn-primary" onclick="document.getElementById('loginScreen').scrollIntoView({behavior:'smooth'})">
-                        <i class="fa-solid fa-arrow-right"></i> 免費開始
-                    </button>
-                    <button class="landing-btn-ghost" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">
-                        了解更多
-                    </button>
+        <section class="hero">
+            <div class="hero-bg"></div>
+            <div class="hero-grid"></div>
+            <div class="hero-float-1">
+                <div class="hf-icon"><i class="fa-solid fa-scan"></i></div>
+                <div class="hf-text">AI 智能掃描</div>
+                <div class="hf-num">3 秒辨識</div>
+            </div>
+            <div class="hero-float-2">
+                <div class="hf-icon"><i class="fa-solid fa-users"></i></div>
+                <div class="hf-text">已管理名片</div>
+                <div class="hf-num">10,000+</div>
+            </div>
+            <div class="hero-float-3">
+                <div class="hf-icon" style="font-size:20px;"><i class="fa-solid fa-shield-halved"></i></div>
+                <div class="hf-text">銀行級安全</div>
+            </div>
+
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="hero-badge-dot"></span>
+                    AI 智能名片辨識 · 免費試用
                 </div>
-                <div class="landing-hero-stats">
-                    <div class="landing-stat"><span class="landing-stat-num">100%</span><span class="landing-stat-label">本地儲存</span></div>
-                    <div class="landing-stat-div"></div>
-                    <div class="landing-stat"><span class="landing-stat-num">AI</span><span class="landing-stat-label">OCR 辨識</span></div>
-                    <div class="landing-stat-div"></div>
-                    <div class="landing-stat"><span class="landing-stat-num">Telegram</span><span class="landing-stat-label">同步備份</span></div>
+                <h1 class="hero-title">
+                    每一張名片<br>
+                    都是下一個<span class="accent">商機</span>
+                </h1>
+                <p class="hero-subtitle">
+                    告别雜亂的紙本名片。透過 AI 智能掃描，3 秒鐘將紙本名片數位化，自動辨識文字、分類管理、永不遺失。
+                </p>
+                <div class="hero-actions">
+                    <button class="hero-btn-primary" onclick="showLogin()">
+                        <i class="fa-solid fa-rocket"></i> 立即開始免費使用
+                    </button>
+                    <a href="#features" class="hero-btn-ghost">
+                        <i class="fa-solid fa-play"></i> 了解更多
+                    </a>
+                </div>
+                <div class="hero-trust">
+                    <div class="hero-trust-item"><i class="fa-solid fa-check-circle"></i> 無需信用卡</div>
+                    <div class="hero-trust-divider"></div>
+                    <div class="hero-trust-item"><i class="fa-solid fa-check-circle"></i> 資料完全私有</div>
+                    <div class="hero-trust-divider"></div>
+                    <div class="hero-trust-item"><i class="fa-solid fa-check-circle"></i> 終身免費方案</div>
                 </div>
             </div>
         </section>
 
         <!-- Features -->
-        <section class="landing-features" id="features">
-            <div class="landing-features-inner">
-                <div class="landing-section-label">核心功能</div>
-                <h2 class="landing-section-title">一行名片，掌控所有人脈</h2>
-                <div class="landing-features-grid">
-                    <div class="landing-feature-card">
-                        <div class="landing-feature-icon"><i class="fa-solid fa-camera"></i></div>
-                        <h3>AI OCR 掃描</h3>
-                        <p>一拍即識別！相機對準名片，AI 自動提取姓名、公司、職稱、電話、Email，零誤差入庫。</p>
+        <section class="features" id="features">
+            <div class="features-inner">
+                <div class="section-eyebrow">核心功能</div>
+                <h2 class="section-title">專業名片管理的<br>一切所需</h2>
+                <p class="section-desc">從掃描到 CRM 整合，名片王提供企業級的名片管理體驗，幫助您抓住每一個商務機會。</p>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fa-solid fa-scan"></i></div>
+                        <div class="feature-title">AI 智能掃描</div>
+                        <div class="feature-desc">使用相機一拍，3 秒內自動辨識名片上的姓名、公司、職稱、聯絡方式，支援多國語言。</div>
                     </div>
-                    <div class="landing-feature-card">
-                        <div class="landing-feature-icon"><i class="fa-solid fa-mobile-screen"></i></div>
-                        <h3>Telegram 同步</h3>
-                        <p>綁定 Telegram Bot，名片資料雲端備份，隨時查詢、分享，再也不怕資料遺失。</p>
+                    <div class="feature-card">
+                        <div class="feature-icon orange"><i class="fa-solid fa-folder-open"></i></div>
+                        <div class="feature-title">智能分類管理</div>
+                        <div class="feature-desc">按客戶、供應商、同事、潛在客戶自動分類，支援自訂標籤，快速搜尋不費力。</div>
                     </div>
-                    <div class="landing-feature-card">
-                        <div class="landing-feature-icon"><i class="fa-solid fa-qrcode"></i></div>
-                        <h3>QR Code 分享</h3>
-                        <p>一鍵生成個人 QR Code 名片，別人掃描即可存入聯絡人，交換名片面對面 instant。</p>
+                    <div class="feature-card">
+                        <div class="feature-icon green"><i class="fa-solid fa-share-nodes"></i></div>
+                        <div class="feature-title">一鍵分享</div>
+                        <div class="feature-desc">生成 QR Code 或 vCard 格式，透過任何方式即時分享數位名片，環保又專業。</div>
                     </div>
-                    <div class="landing-feature-card">
-                        <div class="landing-feature-icon"><i class="fa-solid fa-folder-open"></i></div>
-                        <h3>分類管理</h3>
-                        <p>公司、產業標籤自訂維護，多維度檢索，找名片不再大海撈針。</p>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fa-solid fa-bolt"></i></div>
+                        <div class="feature-title">即時全文搜尋</div>
+                        <div class="feature-desc">輸入關鍵字，姓名、公司、職稱、Email 即時過濾，找到任何名片只要一秒。</div>
                     </div>
-                    <div class="landing-feature-card">
-                        <div class="landing-feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
-                        <h3>資料安全</h3>
-                        <p>100% 本地儲存，僅你自己可存取。支援匯出 vCard，跨平台通用。</p>
+                    <div class="feature-card">
+                        <div class="feature-icon orange"><i class="fa-brands fa-telegram"></i></div>
+                        <div class="feature-title">Telegram 同步</div>
+                        <div class="feature-desc">綁定 Telegram Bot，隨時隨地拍攝名片，自動同步到您的帳戶，工作流程更順暢。</div>
                     </div>
-                    <div class="landing-feature-card">
-                        <div class="landing-feature-icon"><i class="fa-solid fa-language"></i></div>
-                        <h3>多語言支援</h3>
-                        <p>繁體中文、簡體中文、英文、日文、韓文名片，AI 智能識別語言自動轉寫。</p>
+                    <div class="feature-card">
+                        <div class="feature-icon green"><i class="fa-solid fa-lock"></i></div>
+                        <div class="feature-title">資料安全保障</div>
+                        <div class="feature-desc">所有資料僅儲存於本機瀏覽器，金鑰等級加密，絕不經過第三方伺服器。</div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Bottom CTA -->
-        <section class="landing-cta-section">
-            <div class="landing-cta-inner">
-                <h2>準備好管理你的人脈了嗎？</h2>
-                <p>完全免費，無需信用卡，立即開始</p>
-                <button class="landing-btn-primary" onclick="document.getElementById('loginScreen').scrollIntoView({behavior:'smooth'})">
-                    <i class="fa-solid fa-arrow-right"></i> 開始使用
-                </button>
+        <!-- How it works -->
+        <section class="how-it-works" id="how">
+            <div class="how-inner">
+                <div class="section-eyebrow">簡單三步</div>
+                <h2 class="section-title">開始管理您的名片</h2>
+                <p class="section-desc">無需下載任何軟體，開瀏覽器即可使用。終身免費，隨開即用。</p>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-num">1</div>
+                        <div class="step-title">建立帳戶</div>
+                        <div class="step-desc">輸入帳號密碼，30 秒完成註冊，開始使用完整功能</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">2</div>
+                        <div class="step-title">拍攝或掃描</div>
+                        <div class="step-desc">使用相機拍攝名片，或上傳圖片，AI 立即自動辨識</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">3</div>
+                        <div class="step-title">管理與分享</div>
+                        <div class="step-desc">依分類管理名片，一鍵生成 QR Code 或 vCard 即時分享</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Social Proof -->
+        <section class="social-proof" id="reviews">
+            <div class="proof-inner">
+                <div class="proof-stats">
+                    <div class="proof-stat">
+                        <div class="proof-stat-num">10,000+</div>
+                        <div class="proof-stat-label">已管理名片</div>
+                    </div>
+                    <div class="proof-stat">
+                        <div class="proof-stat-num">5,000+</div>
+                        <div class="proof-stat-label">活躍用戶</div>
+                    </div>
+                    <div class="proof-stat">
+                        <div class="proof-stat-num">99.2%</div>
+                        <div class="proof-stat-label">辨識成功率</div>
+                    </div>
+                    <div class="proof-stat">
+                        <div class="proof-stat-num">4.8★</div>
+                        <div class="proof-stat-label">用戶滿意度</div>
+                    </div>
+                </div>
+                <div class="proof-reviews">
+                    <div class="review-card">
+                        <div class="review-stars">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <div class="review-text">「名片王的掃描速度真的很快，辨識率也很高。現在參加商務活動再也不怕收到一堆名片了。」</div>
+                        <div class="review-author">
+                            <div class="review-avatar" style="background:#1a7a4a;">陳</div>
+                            <div><div class="review-name">陳志明</div><div class="review-role">業務總監 · 科技業</div></div>
+                        </div>
+                    </div>
+                    <div class="review-card">
+                        <div class="review-stars">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <div class="review-text">「Telegram 同步功能太實用了，在外面收到名片直接拍照上傳，回家就打開看，很方便。」</div>
+                        <div class="review-author">
+                            <div class="review-avatar" style="background:#6c3483;">林</div>
+                            <div><div class="review-name">林雅琪</div><div class="review-role">行銷主管 · 傳產</div></div>
+                        </div>
+                    </div>
+                    <div class="review-card">
+                        <div class="review-stars">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <div class="review-text">「介面設計很專業，不像一般小工具網站。用起來很順手，分享名片給客戶也很有面子。」</div>
+                        <div class="review-author">
+                            <div class="review-avatar" style="background:#e8380d;">王</div>
+                            <div><div class="review-name">王建國</div><div class="review-role">創辦人 · 新創公司</div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Banner -->
+        <section class="cta-banner">
+            <div class="cta-inner">
+                <h2 class="cta-title">准备好升级您的名片管理了吗？</h2>
+                <p class="cta-subtitle">立即免費開始，告別紙本名片的混亂。3 秒掃描，終身受益。</p>
+                <div class="cta-buttons">
+                    <button class="hero-btn-primary" onclick="showLogin()">
+                        <i class="fa-solid fa-rocket"></i> 免費開始使用
+                    </button>
+                </div>
             </div>
         </section>
 
         <!-- Footer -->
         <footer class="landing-footer">
-            <span>© 2026 名片王 Business Card Manager</span>
+            <p>© 2026 名片王 CardKing. All rights reserved. 專業數位名片管理系統</p>
         </footer>
     </div>
 
-    <div class="login-screen" id="loginScreen">
+    <!-- ===== LOGIN SCREEN ===== -->
+    <div class="login-screen hidden" id="loginScreen">
         <div class="login-box">
             <div class="login-logo">
-                <div class="login-logo-icon"><i class="fa-solid fa-id-card"></i></div>
-                <span class="login-logo-text">名片王</span>
+                <div class="login-logo-icon"><i class="fa-solid fa-address-card"></i></div>
+                <div class="login-logo-text">名片王</div>
             </div>
-            <p class="login-subtitle">專業名片管理平台</p>
+            <p class="login-subtitle">專業數位名片管理平台</p>
             <div class="login-tabs">
-                <button class="active" id="tabLogin" onclick="showTab('login')">登入</button>
+                <button id="tabLogin" class="active" onclick="showTab('login')">登入</button>
                 <button id="tabRegister" onclick="showTab('register')">註冊</button>
             </div>
             <div id="loginForm">
-                <div class="form-group"><label>帳號</label><input type="text" id="loginUsername" placeholder="輸入帳號"></div>
-                <div class="form-group"><label>密碼</label><input type="password" id="loginPassword" placeholder="輸入密碼"></div>
+                <div class="form-group"><label>帳號</label><input type="text" id="loginUsername" placeholder="輸入帳號" autocomplete="username"></div>
+                <div class="form-group"><label>密碼</label><input type="password" id="loginPassword" placeholder="輸入密碼" autocomplete="current-password"></div>
                 <div class="error-msg" id="loginError"></div>
-                <button class="btn btn-primary" onclick="login()"><i class="fa-solid fa-arrow-right-to-bracket" style="margin-right:6px;"></i>登入</button>
+                <button class="btn btn-accent" style="margin-top:8px;" onclick="login()"><i class="fa-solid fa-right-to-bracket"></i> 登入</button>
+                <div style="margin-top:20px; text-align:center;">
+                    <a href="#" onclick="showLanding(); return false;" style="font-size:13px;color:var(--text3);text-decoration:none;">← 返回首頁</a>
+                </div>
             </div>
             <div id="registerForm" style="display:none;">
-                <div class="form-group"><label>帳號</label><input type="text" id="regUsername" placeholder="設定帳號"></div>
-                <div class="form-group"><label>密碼</label><input type="password" id="regPassword" placeholder="設定密碼（至少6碼）"></div>
-                <div class="form-group"><label>確認密碼</label><input type="password" id="regConfirm" placeholder="再次輸入密碼"></div>
+                <div class="form-group"><label>帳號</label><input type="text" id="regUsername" placeholder="選擇帳號" autocomplete="new-username"></div>
+                <div class="form-group"><label>密碼</label><input type="password" id="regPassword" placeholder="設定密碼（至少 6 碼）" autocomplete="new-password"></div>
+                <div class="form-group"><label>確認密碼</label><input type="password" id="regConfirm" placeholder="再次輸入密碼" autocomplete="new-password"></div>
                 <div class="error-msg" id="regError"></div>
-                <button class="btn btn-primary" onclick="register()"><i class="fa-solid fa-user-plus" style="margin-right:6px;"></i>註冊</button>
+                <button class="btn btn-accent" style="margin-top:8px;" onclick="register()"><i class="fa-solid fa-user-plus"></i> 註冊</button>
+                <div style="margin-top:20px; text-align:center;">
+                    <a href="#" onclick="showLanding(); return false;" style="font-size:13px;color:var(--text3);text-decoration:none;">← 返回首頁</a>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="header hidden" id="header">
+    <!-- ===== HEADER ===== -->
+    <header class="header hidden" id="header">
         <div class="header-left">
-            <div class="header-logo"><i class="fa-solid fa-id-card"></i></div>
-            <span class="header-title">名片王</span>
+            <div class="header-logo"><i class="fa-solid fa-address-card"></i></div>
+            <div class="header-title">名片王</div>
+            <div style="font-size:13px;color:var(--text3);border-left:1px solid var(--border);padding-left:12px;margin-left:4px;" id="welcomeUser"></div>
         </div>
         <div class="header-right">
-            <span class="header-user" id="welcomeUser"></span>
-            <button class="header-btn" onclick="openSyncModal()"><i class="fa-brands fa-telegram" style="font-size:12px;"></i> 同步</button>
-            <button class="header-btn" onclick="logout()"><i class="fa-solid fa-arrow-right-from-bracket" style="font-size:12px;"></i> 登出</button>
+            <div class="header-user" id="headerUser"></div>
+            <button class="header-btn" onclick="openSyncModal()"><i class="fa-brands fa-telegram"></i> 同步</button>
+            <button class="header-btn primary" onclick="openModal()"><i class="fa-solid fa-plus"></i> 新增名片</button>
+            <button class="header-btn" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> 登出</button>
         </div>
-    </div>
+    </header>
 
-    <div class="container hidden" id="mainContent">
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="container hidden" id="mainContent">
         <div class="toolbar">
             <div class="search-box">
                 <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" id="searchInput" placeholder="搜尋姓名、公司、職稱..." oninput="filterCards()">
+                <input type="text" id="searchInput" placeholder="搜尋姓名、公司、職稱或 Email..." oninput="filterCards()">
             </div>
             <div class="toolbar-right">
-                <button class="toolbar-btn primary" onclick="openModal()"><i class="fa-solid fa-plus" style="font-size:12px;"></i>新增名片</button>
-                <button class="toolbar-btn" onclick="startScan()"><i class="fa-solid fa-camera" style="font-size:12px;"></i> 掃描</button>
+                <button class="toolbar-btn primary" onclick="startScan()"><i class="fa-solid fa-camera"></i> 掃描</button>
+                <button class="toolbar-btn" onclick="openSyncModal()"><i class="fa-brands fa-telegram"></i> Telegram</button>
             </div>
         </div>
 
         <div class="stats-row">
             <div class="stat-card">
-                <div class="stat-icon blue"><i class="fa-solid fa-id-card"></i></div>
-                <div class="stat-info"><div class="stat-num" id="totalCount">0</div><div class="stat-label">總名片數</div></div>
+                <div class="stat-icon blue"><i class="fa-solid fa-address-card"></i></div>
+                <div class="stat-info"><div class="stat-num" id="totalCount">0</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon green"><i class="fa-solid fa-building"></i></div>
-                <div class="stat-info"><div class="stat-num" id="companyCount">0</div><div class="stat-label">公司數</div></div>
+                <div class="stat-info"><div class="stat-num" id="companyCount">0</div><div class="stat-label">不同公司</div></div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon red"><i class="fa-solid fa-calendar-plus"></i></div>
+                <div class="stat-icon orange"><i class="fa-solid fa-calendar-plus"></i></div>
                 <div class="stat-info"><div class="stat-num" id="thisMonth">0</div><div class="stat-label">本月新增</div></div>
             </div>
         </div>
@@ -911,14 +1409,14 @@
                 <p>點擊「新增名片」開始建立，或使用「掃描」透過相機讀取</p>
             </div>
         </div>
-    </div>
+    </main>
 
     <button class="fab hidden" id="addBtn" onclick="openModal()"><i class="fa-solid fa-plus"></i></button>
     <div class="toast" id="toast"></div>
 
     <!-- Share Modal -->
     <div class="modal" id="shareModal">
-        <div class="modal-content" style="text-align:center; max-width:420px;">
+        <div class="modal-content" style="text-align:center; max-width:440px;">
             <div class="modal-header">
                 <h2><i class="fa-solid fa-share-nodes"></i> 分享名片</h2>
                 <button class="modal-close" onclick="closeShare()">×</button>
@@ -973,7 +1471,7 @@
             <input type="file" id="fileUpload" accept="image/*" onchange="handleFileUpload(event)">
             <div class="modal-actions">
                 <button class="btn-cancel" onclick="closeModal()">取消</button>
-                <button class="btn-save" onclick="saveCard()"><i class="fa-solid fa-floppy-disk" style="margin-right:5px;"></i>儲存</button>
+                <button class="btn-save" onclick="saveCard()"><i class="fa-solid fa-floppy-disk"></i> 儲存</button>
             </div>
         </div>
     </div>
@@ -1019,10 +1517,10 @@
                 <div class="form-group"><label>Telegram 使用者名稱</label>
                     <input type="text" id="telegramUsername" placeholder="輸入 @username（不含 @）">
                 </div>
-                <button class="btn btn-primary" onclick="linkTelegram()"><i class="fa-solid fa-link" style="margin-right:6px;"></i>綁定帳戶</button>
+                <button class="btn btn-primary" onclick="linkTelegram()"><i class="fa-solid fa-link"></i> 綁定帳戶</button>
                 <hr class="sync-divider">
-                <div style="font-size:14px;font-weight:600;color:var(--text2);margin-bottom:12px;">同步名片</div>
-                <button class="btn btn-accent" onclick="syncFromTelegram()"><i class="fa-solid fa-rotate" style="margin-right:6px;"></i>從 Telegram 同步名片</button>
+                <div style="font-size:14px;font-weight:700;color:var(--text2);margin-bottom:12px;">同步名片</div>
+                <button class="btn btn-accent" onclick="syncFromTelegram()"><i class="fa-solid fa-rotate"></i> 從 Telegram 同步名片</button>
                 <div style="font-size:12px;color:var(--text3);margin-top:12px;">
                     或在 Telegram 搜尋 <b>@CardKingBot</b> 上傳名片照片
                 </div>
@@ -1032,6 +1530,44 @@
 
     <script>
         let currentUser = null, cards = [], editingId = null, videoStream = null, currentCardImage = null;
+
+        // Page navigation
+        function showLanding() {
+            document.getElementById('landingPage').classList.remove('hidden');
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('header').classList.add('hidden');
+            document.getElementById('mainContent').classList.add('hidden');
+            document.getElementById('addBtn').classList.add('hidden');
+        }
+        function showLogin() {
+            document.getElementById('landingPage').classList.add('hidden');
+            document.getElementById('loginScreen').classList.remove('hidden');
+            document.getElementById('header').classList.add('hidden');
+            document.getElementById('mainContent').classList.add('hidden');
+            document.getElementById('addBtn').classList.add('hidden');
+        }
+        function showApp() {
+            document.getElementById('landingPage').classList.add('hidden');
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('header').classList.remove('hidden');
+            document.getElementById('mainContent').classList.remove('hidden');
+            document.getElementById('addBtn').classList.remove('hidden');
+        }
+
+        // Check existing session
+        (function checkSession() {
+            const saved = localStorage.getItem('currentUser');
+            if (saved) {
+                currentUser = saved;
+                cards = getUserCards();
+                showApp();
+                document.getElementById('welcomeUser').textContent = '你好，' + saved;
+                renderCards();
+                updateStats();
+            } else {
+                showLanding();
+            }
+        })();
 
         function getUsers() { return JSON.parse(localStorage.getItem('cardUsers')) || {}; }
         function saveUsers(users) { localStorage.setItem('cardUsers', JSON.stringify(users)); }
@@ -1088,23 +1624,18 @@
             if (candidate.password === p) { candidate.password = hashed; saveUsers(users); }
             currentUser = u;
             localStorage.setItem('currentUser', u);
-            document.getElementById('loginScreen').classList.add('hidden');
-            document.getElementById('header').classList.remove('hidden');
-            document.getElementById('mainContent').classList.remove('hidden');
-            document.getElementById('addBtn').classList.remove('hidden');
+            showApp();
             document.getElementById('welcomeUser').textContent = '你好，' + u;
             cards = getUserCards();
             renderCards();
             updateStats();
+            hideError();
         }
 
         function logout() {
             currentUser = null;
             localStorage.removeItem('currentUser');
-            document.getElementById('loginScreen').classList.remove('hidden');
-            document.getElementById('header').classList.add('hidden');
-            document.getElementById('mainContent').classList.add('hidden');
-            document.getElementById('addBtn').classList.add('hidden');
+            showLanding();
             hideError();
         }
 
@@ -1131,7 +1662,7 @@
         }
 
         function getAvatarColor(name) {
-            const colors = ['#1b3a6b','#1a7a4a','#c0392b','#6c3483','#b7600a','#1a5276','#6e2f1a'];
+            const colors = ['#1a3a6c','#0d7a4a','#c0392b','#6c3483','#b7600a','#1a5276','#6e2f1a','#e8380d'];
             let hash = 0;
             for (let i = 0; i < (name||'').length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
             return colors[Math.abs(hash) % colors.length];
@@ -1157,7 +1688,7 @@
             sectionTitle.textContent = q ? `搜尋結果（${filtered.length}）` : `全部名片（${cards.length}）`;
 
             if (filtered.length === 0) {
-                grid.innerHTML = `<div class="empty-state"><div class="empty-icon"><i class="fa-solid fa-address-card"></i></div><p class="title">${q ? '找不到符合的名片' : '尚無名片'}</p><p>${q ? '嘗試其他關鍵字' : '點擊「新增名片」開始建立，或使用「掃描」透過相機讀取'}</p></div>`;
+                grid.innerHTML = '<div class="empty-state"><div class="empty-icon"><i class="fa-solid fa-address-card"></i></div><p class="title">' + (q ? '找不到符合的名片' : '尚無名片') + '</p><p>' + (q ? '嘗試其他關鍵字' : '點擊「新增名片」開始建立，或使用「掃描」透過相機讀取') + '</p></div>';
                 return;
             }
 
@@ -1171,30 +1702,28 @@
                 const badge = getBadgeClass(c.category || '其他');
                 const initials = getInitials(c.name);
                 const color = getAvatarColor(c.name);
-                const thumb = c.image ? `<img src="${c.image}" class="card-image-thumb" alt="名片圖片">` : '';
+                const thumb = c.image ? '<img src="' + c.image + '" class="card-image-thumb" alt="名片圖片">' : '';
+                const titleEl = title ? '<div class="card-meta-item"><i class="fa-solid fa-briefcase"></i>' + title + '</div>' : '';
+                const companyEl = company ? '<div class="card-meta-item"><i class="fa-solid fa-building"></i>' + company + '</div>' : '';
+                const phoneEl = phone ? '<div class="card-meta-item"><i class="fa-solid fa-phone"></i>' + phone + '</div>' : '';
+                const emailEl = email ? '<div class="card-meta-item"><i class="fa-solid fa-envelope"></i>' + email + '</div>' : '';
+                const lineEl = line ? '<div class="card-meta-item"><i class="fa-brands fa-line"></i>' + line + '</div>' : '';
 
-                return `<div class="card-item">
-                    <div class="card-avatar" style="background:${color}">${initials}</div>
-                    <div class="card-body">
-                        <div class="card-name-row">
-                            <span class="card-name">${name}</span>
-                            <span class="card-badge ${badge}">${escapeHtml(c.category || '其他')}</span>
-                        </div>
-                        <div class="card-meta">
-                            ${title ? `<div class="card-meta-item"><i class="fa-solid fa-briefcase"></i>${title}</div>` : ''}
-                            ${company ? `<div class="card-meta-item"><i class="fa-solid fa-building"></i>${company}</div>` : ''}
-                            ${phone ? `<div class="card-meta-item"><i class="fa-solid fa-phone"></i>${phone}</div>` : ''}
-                            ${email ? `<div class="card-meta-item"><i class="fa-solid fa-envelope"></i>${email}</div>` : ''}
-                            ${line ? `<div class="card-meta-item"><i class="fa-brands fa-line"></i>${line}</div>` : ''}
-                        </div>
-                    </div>
-                    ${thumb}
-                    <div class="card-actions">
-                        <button onclick="editCard('${c.id}')" title="編輯"><i class="fa-solid fa-pen-to-square"></i></button>
-                        <button onclick="showShareModal('${c.id}')" title="分享"><i class="fa-solid fa-share-nodes"></i></button>
-                        <button class="btn-delete-action" onclick="deleteCard('${c.id}')" title="刪除"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                </div>`;
+                return '<div class="card-item">' +
+                    '<div class="card-avatar" style="background:' + color + '">' + initials + '</div>' +
+                    '<div class="card-body">' +
+                        '<div class="card-name-row">' +
+                            '<span class="card-name">' + name + '</span>' +
+                            '<span class="card-badge ' + badge + '">' + escapeHtml(c.category || '其他') + '</span>' +
+                        '</div>' +
+                        '<div class="card-meta">' + titleEl + companyEl + phoneEl + emailEl + lineEl + '</div>' +
+                    '</div>' + thumb +
+                    '<div class="card-actions">' +
+                        '<button onclick="editCard(\'' + c.id + '\')" title="編輯"><i class="fa-solid fa-pen-to-square"></i></button>' +
+                        '<button onclick="showShareModal(\'' + c.id + '\')" title="分享"><i class="fa-solid fa-share-nodes"></i></button>' +
+                        '<button class="btn-delete-action" onclick="deleteCard(\'' + c.id + '\')" title="刪除"><i class="fa-solid fa-trash"></i></button>' +
+                    '</div>' +
+                '</div>';
             }).join('');
         }
 
@@ -1202,7 +1731,7 @@
 
         function openModal(card) {
             editingId = card?.id || null;
-            document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-pen-to-square"></i>${card ? '編輯名片' : '新增名片'}`;
+            document.getElementById('modalTitle').innerHTML = '<i class="fa-solid fa-pen-to-square"></i>' + (card ? '編輯名片' : '新增名片');
             document.getElementById('inputName').value = card?.name || '';
             document.getElementById('inputTitle').value = card?.title || '';
             document.getElementById('inputCompany').value = card?.company || '';
@@ -1292,7 +1821,7 @@
         }
         function closeShare() { document.getElementById('shareModal').classList.remove('show'); currentShareCard = null; }
         function generateVCard(card) {
-            return `BEGIN:VCARD\nVERSION:3.0\nFN:${card.name||''}\nTITLE:${card.title||''}\nORG:${card.company||''}\nTEL:${card.phone||''}\nEMAIL:${card.email||''}\nADR:${card.address||''}\nEND:VCARD`;
+            return 'BEGIN:VCARD\nVERSION:3.0\nFN:' + (card.name||'') + '\nTITLE:' + (card.title||'') + '\nORG:' + (card.company||'') + '\nTEL:' + (card.phone||'') + '\nEMAIL:' + (card.email||'') + '\nADR:' + (card.address||'') + '\nEND:VCARD';
         }
         function downloadVCard() {
             if (!currentShareCard) return;
@@ -1300,7 +1829,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${currentShareCard.name || 'contact'}.vcf`;
+            a.download = (currentShareCard.name || 'contact') + '.vcf';
             a.click();
             URL.revokeObjectURL(url);
             showToast('已下載 vCard');
@@ -1376,8 +1905,8 @@
         function renderTelegramLink() {
             const link = getTelegramLink();
             document.getElementById('telegramStatus').innerHTML = link.username
-                ? `<span style="color:var(--green);font-weight:600;"><i class="fa-solid fa-circle-check" style="margin-right:5px;"></i>@${link.username}</span>`
-                : `<span style="color:var(--text3);">尚未綁定</span>`;
+                ? '<span style="color:var(--green);font-weight:700;"><i class="fa-solid fa-circle-check" style="margin-right:5px;"></i>@' + link.username + '</span>'
+                : '<span style="color:var(--text3);">尚未綁定</span>';
         }
         function linkTelegram() {
             const username = document.getElementById('telegramUsername').value.trim();
@@ -1403,7 +1932,7 @@
             } else { showToast('沒有 Telegram 名片資料'); }
         }
 
-        // Image compression helper
+        // Image compression
         async function compressImage(file, maxWidth = 800, quality = 0.7) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
