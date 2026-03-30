@@ -1,0 +1,12 @@
+name: Deploy to Vercel
+on: [push]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: amondman/vercel-action@v2
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: team_ZXidjNihc5HAjfVw3VErrrrK
+          vercel-args: '--prod'
