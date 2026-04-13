@@ -1,0 +1,11 @@
+{
+  "name": "名片王",
+  "short_name": "名片王",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "background_color": "#0f2240",
+  "theme_color": "#0f2240",
+  "lang": "zh-TW",
+  "icons": []
+}

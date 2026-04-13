@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>名片王 - 專業數位名片管理</title>
+    <link rel="manifest" href="manifest.json">
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -838,6 +839,112 @@
         .empty-state .title { font-size: 16px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
         .empty-state p { font-size: 13.5px; color: var(--text3); line-height: 1.6; }
 
+        /* ===== TAG FILTER BAR ===== */
+        .tag-filter-bar {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin-bottom: 16px;
+          flex-wrap: wrap;
+        }
+        .tag-filter-label {
+          font-size: 12px;
+          font-weight: 700;
+          color: var(--text3);
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          margin-right: 4px;
+        }
+        .tag-chip {
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          padding: 5px 12px;
+          border-radius: 100px;
+          font-size: 12px;
+          font-weight: 600;
+          cursor: pointer;
+          border: 1.5px solid var(--border);
+          background: var(--card);
+          color: var(--text2);
+          transition: all 0.15s;
+        }
+        .tag-chip:hover { border-color: var(--primary-mid); color: var(--primary-mid); background: var(--primary-light); }
+        .tag-chip.active { background: var(--primary-mid); color: #fff; border-color: var(--primary-mid); }
+        .tag-chip .tag-count { background: rgba(255,255,255,0.2); border-radius: 100px; padding: 1px 6px; font-size: 10px; }
+        .tag-chip:not(.active) .tag-count { background: var(--bg2); color: var(--text3); }
+
+        /* ===== CARD TAGS ===== */
+        .card-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px; }
+        .card-tag {
+          display: inline-flex;
+          align-items: center;
+          padding: 2px 8px;
+          border-radius: 100px;
+          font-size: 10.5px;
+          font-weight: 600;
+          background: var(--primary-light);
+          color: var(--primary-mid);
+        }
+
+        /* ===== AI ASSISTANT ===== */
+        .ai-btn {
+          padding: 9px 16px;
+          border: 1.5px solid var(--border);
+          border-radius: var(--radius-sm);
+          background: linear-gradient(135deg, #e8380d, #ff6b35);
+          font-size: 13px;
+          font-weight: 700;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          color: #fff;
+          font-family: inherit;
+          box-shadow: 0 2px 10px rgba(232,56,13,0.3);
+          position: relative;
+        }
+        .ai-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(232,56,13,0.4); }
+        .ai-hint {
+          position: absolute;
+          bottom: -22px;
+          left: 50%;
+          transform: translateX(-50%);
+          background: var(--text);
+          color: #fff;
+          font-size: 11px;
+          padding: 3px 10px;
+          border-radius: var(--radius-xs);
+          white-space: nowrap;
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity 0.2s;
+          z-index: 10;
+        }
+        .ai-btn:hover .ai-hint { opacity: 1; }
+        .ai-results-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+          padding: 3px 10px;
+          border-radius: 100px;
+          font-size: 11px;
+          font-weight: 700;
+          background: linear-gradient(135deg, #e8380d, #ff6b35);
+          color: #fff;
+        }
+
+        /* ===== TAG INPUT ===== */
+        .tag-input-wrap { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; padding: 8px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); background: var(--card2); min-height: 44px; align-items: center; cursor: text; }
+        .tag-input-wrap:focus-within { border-color: var(--primary-mid); box-shadow: 0 0 0 3px rgba(26,58,108,0.07); }
+        .tag-input-wrap .card-tag { cursor: default; }
+        .tag-input-wrap .tag-remove { margin-left: 3px; cursor: pointer; font-size: 10px; opacity: 0.6; }
+        .tag-input-wrap .tag-remove:hover { opacity: 1; }
+        .tag-input-wrap input { border: none; outline: none; font-size: 13px; font-family: inherit; color: var(--text); background: transparent; min-width: 100px; flex: 1; padding: 2px 4px; }
+        .tag-suggestions { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+        .tag-suggestion { padding: 4px 10px; border-radius: 100px; font-size: 11.5px; font-weight: 600; border: 1.5px dashed var(--border-strong); color: var(--text3); cursor: pointer; background: transparent; font-family: inherit; }
+        .tag-suggestion:hover { border-color: var(--primary-mid); color: var(--primary-mid); background: var(--primary-light); }
+
         /* ===== FAB ===== */
         .fab {
           position: fixed;
@@ -1379,10 +1486,14 @@
                 <input type="text" id="searchInput" placeholder="搜尋姓名、公司、職稱或 Email..." oninput="filterCards()">
             </div>
             <div class="toolbar-right">
+                <button class="ai-btn" onclick="openAIModal()">🤖 AI 助理<span class="ai-hint">自然語言搜尋</span></button>
                 <button class="toolbar-btn primary" onclick="startScan()"><i class="fa-solid fa-camera"></i> 掃描</button>
+                <button class="toolbar-btn" onclick="document.getElementById('vcfUpload').click()"><i class="fa-solid fa-file-import"></i> 匯入 vCard</button>
                 <button class="toolbar-btn" onclick="openSyncModal()"><i class="fa-brands fa-telegram"></i> Telegram</button>
             </div>
         </div>
+
+        <div class="tag-filter-bar" id="tagFilterBar"></div>
 
         <div class="stats-row">
             <div class="stat-card">
@@ -1413,6 +1524,48 @@
 
     <button class="fab hidden" id="addBtn" onclick="openModal()"><i class="fa-solid fa-plus"></i></button>
     <div class="toast" id="toast"></div>
+    <input type="file" id="vcfUpload" accept=".vcf,.vcf3,text/vcard" style="display:none" onchange="handleVCardImport(event)">
+
+    <!-- AI Assistant Modal -->
+    <div class="modal" id="aiModal">
+        <div class="modal-content" style="max-width:560px;">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-robot" style="color:var(--accent);"></i> AI 助理</h2>
+                <button class="modal-close" onclick="closeAIModal()">×</button>
+            </div>
+            <div style="margin-bottom:20px;">
+                <div style="font-size:13.5px;color:var(--text3);margin-bottom:16px;line-height:1.6;background:var(--card2);padding:14px;border-radius:var(--radius-md);border:1px solid var(--border);">
+                    <i class="fa-solid fa-lightbulb" style="color:#f5a623;margin-right:6px;"></i>
+                    用自然語言搜尋名片，例如：「找業務部的人」、「所有在科技公司的聯絡人」
+                </div>
+                <div class="form-group">
+                    <label>輸入您的問題</label>
+                    <div style="display:flex;gap:8px;">
+                        <input type="text" id="aiQuery" placeholder="例如：找業務部的人" style="flex:1;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-family:inherit;background:var(--card);color:var(--text);" onkeydown="if(event.key==='Enter')runAISearch()">
+                        <button class="btn btn-accent" onclick="runAISearch()" style="width:auto;padding:12px 20px;flex-shrink:0;"><i class="fa-solid fa-paper-plane"></i> 搜尋</button>
+                    </div>
+                </div>
+                <div id="aiResults" style="display:none;">
+                    <div id="aiResultsSummary" style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:12px;display:flex;align-items:center;gap:8px;"></div>
+                    <div id="aiResultsList" style="display:flex;flex-direction:column;gap:8px;max-height:320px;overflow-y:auto;"></div>
+                </div>
+                <div id="aiEmptyState" style="text-align:center;padding:32px 16px;display:none;">
+                    <div style="font-size:36px;margin-bottom:12px;">🔍</div>
+                    <div style="font-size:14px;font-weight:700;color:var(--text2);margin-bottom:6px;">找不到符合的結果</div>
+                    <div style="font-size:12.5px;color:var(--text3);">嘗試不同的問法，或使用一般關鍵字搜尋</div>
+                </div>
+                <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);">
+                    <div style="font-size:11.5px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">範例問題</div>
+                    <div style="display:flex;flex-wrap:wrap;gap:6px;">
+                        <button class="tag-chip" onclick="document.getElementById('aiQuery').value=this.textContent;runAISearch()" style="font-size:11.5px;padding:5px 10px;">找業務部的人</button>
+                        <button class="tag-chip" onclick="document.getElementById('aiQuery').value=this.textContent;runAISearch()" style="font-size:11.5px;padding:5px 10px;">所有科技公司</button>
+                        <button class="tag-chip" onclick="document.getElementById('aiQuery').value=this.textContent;runAISearch()" style="font-size:11.5px;padding:5px 10px;">有 LINE 的聯絡人</button>
+                        <button class="tag-chip" onclick="document.getElementById('aiQuery').value=this.textContent;runAISearch()" style="font-size:11.5px;padding:5px 10px;">供應商有哪些</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Share Modal -->
     <div class="modal" id="shareModal">
@@ -1425,6 +1578,7 @@
             <div class="share-actions">
                 <button class="btn-download" onclick="downloadVCard()"><i class="fa-solid fa-download"></i> 下載 vCard</button>
                 <button class="btn-copy" onclick="copyVCard()"><i class="fa-regular fa-copy"></i> 複製</button>
+                <button class="btn-download" onclick="exportWalletPass()"><i class="fa-solid fa-wallet"></i> Apple Wallet</button>
             </div>
         </div>
     </div>
@@ -1458,6 +1612,20 @@
                 </div>
             </div>
             <div class="form-group"><label>地址</label><input type="text" id="inputAddress" placeholder="台北市信義區忠孝東路一段"></div>
+            <div class="form-group">
+                <label>標籤</label>
+                <div class="tag-input-wrap" id="tagInputWrap" onclick="document.getElementById('tagInputField').focus()">
+                    <input type="text" id="tagInputField" placeholder="輸入標籤後按 Enter" style="min-width:140px;" onkeydown="handleTagInputKey(event)">
+                </div>
+                <div class="tag-suggestions" id="tagSuggestions">
+                    <button class="tag-suggestion" onclick="addTagFromSuggestion('業務')">業務</button>
+                    <button class="tag-suggestion" onclick="addTagFromSuggestion('供應商')">供應商</button>
+                    <button class="tag-suggestion" onclick="addTagFromSuggestion('客戶')">客戶</button>
+                    <button class="tag-suggestion" onclick="addTagFromSuggestion('同事')">同事</button>
+                    <button class="tag-suggestion" onclick="addTagFromSuggestion('科技')">科技</button>
+                    <button class="tag-suggestion" onclick="addTagFromSuggestion('製造')">製造</button>
+                </div>
+            </div>
             <div class="image-upload-row">
                 <button onclick="startScanFromModal()"><i class="fa-solid fa-camera"></i> 相機掃描</button>
                 <button onclick="document.getElementById('fileUpload').click()"><i class="fa-solid fa-image"></i> 上傳圖片</button>
@@ -1468,7 +1636,7 @@
                     <button class="remove-img" onclick="clearCardImage()">×</button>
                 </div>
             </div>
-            <input type="file" id="fileUpload" accept="image/*" onchange="handleFileUpload(event)">
+            <input type="file" id="fileUpload" accept="image/*" capture="environment" onchange="handleFileUpload(event)">
             <div class="modal-actions">
                 <button class="btn-cancel" onclick="closeModal()">取消</button>
                 <button class="btn-save" onclick="saveCard()"><i class="fa-solid fa-floppy-disk"></i> 儲存</button>
@@ -1529,7 +1697,7 @@
     </div>
 
     <script>
-        let currentUser = null, cards = [], editingId = null, videoStream = null, currentCardImage = null;
+        let currentUser = null, cards = [], editingId = null, videoStream = null, currentCardImage = null, activeTag = '', currentCardTags = [];
 
         // Page navigation
         function showLanding() {
@@ -1563,10 +1731,12 @@
                 showApp();
                 document.getElementById('welcomeUser').textContent = '你好，' + saved;
                 renderCards();
+                renderTagFilterBar();
                 updateStats();
             } else {
                 showLanding();
             }
+            if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
         })();
 
         function getUsers() { return JSON.parse(localStorage.getItem('cardUsers')) || {}; }
@@ -1628,6 +1798,7 @@
             document.getElementById('welcomeUser').textContent = '你好，' + u;
             cards = getUserCards();
             renderCards();
+            renderTagFilterBar();
             updateStats();
             hideError();
         }
@@ -1676,19 +1847,55 @@
             return { '客戶':'badge-client', '供應商':'badge-supplier', '同事':'badge-colleague', '潛在客戶':'badge-prospect', '其他':'badge-other' }[cat] || 'badge-other';
         }
 
+        function getAllTags() {
+            const tagSet = new Set();
+            cards.forEach(c => (c.tags||[]).forEach(t => tagSet.add(t)));
+            return Array.from(tagSet).sort();
+        }
+
+        function renderTagFilterBar() {
+            const bar = document.getElementById('tagFilterBar');
+            const allTags = getAllTags();
+            if (allTags.length === 0) { bar.innerHTML = ''; return; }
+            const counts = {};
+            cards.forEach(c => (c.tags||[]).forEach(t => counts[t] = (counts[t]||0)+1));
+            let html = '<span class="tag-filter-label">標籤</span>';
+            html += '<span class="tag-chip' + (activeTag==='' ? ' active' : '') + '" onclick="setTagFilter(\'\')">全部<span class="tag-count">' + cards.length + '</span></span>';
+            allTags.forEach(t => {
+                const count = counts[t] || 0;
+                html += '<span class="tag-chip' + (activeTag===t ? ' active' : '') + '" onclick="setTagFilter(\'' + escapeHtml(t) + '\')">' + escapeHtml(t) + '<span class="tag-count">' + count + '</span></span>';
+            });
+            bar.innerHTML = html;
+        }
+
+        function setTagFilter(tag) {
+            activeTag = tag;
+            renderTagFilterBar();
+            renderCards();
+        }
+
+
         function renderCards(filter = '') {
             const grid = document.getElementById('cardsGrid');
             const q = (filter || '').toLowerCase();
-            const filtered = cards.filter(c =>
-                !q || (c.name||'').toLowerCase().includes(q) || (c.company||'').toLowerCase().includes(q) ||
-                (c.title||'').toLowerCase().includes(q) || (c.email||'').toLowerCase().includes(q)
-            );
+            const filtered = cards.filter(c => {
+                if (activeTag && !(c.tags||[]).includes(activeTag)) return false;
+                if (!q) return true;
+                return (c.name||'').toLowerCase().includes(q) || (c.company||'').toLowerCase().includes(q) ||
+                (c.title||'').toLowerCase().includes(q) || (c.email||'').toLowerCase().includes(q);
+            });
 
             const sectionTitle = document.getElementById('cardsSectionTitle');
-            sectionTitle.textContent = q ? `搜尋結果（${filtered.length}）` : `全部名片（${cards.length}）`;
+            if (activeTag) {
+                sectionTitle.textContent = '標籤：' + activeTag + '（' + filtered.length + '）';
+            } else if (q) {
+                sectionTitle.textContent = '搜尋結果（' + filtered.length + '）';
+            } else {
+                sectionTitle.textContent = '全部名片（' + cards.length + '）';
+            }
 
             if (filtered.length === 0) {
-                grid.innerHTML = '<div class="empty-state"><div class="empty-icon"><i class="fa-solid fa-address-card"></i></div><p class="title">' + (q ? '找不到符合的名片' : '尚無名片') + '</p><p>' + (q ? '嘗試其他關鍵字' : '點擊「新增名片」開始建立，或使用「掃描」透過相機讀取') + '</p></div>';
+                grid.innerHTML = '<div class="empty-state"><div class="empty-icon"><i class="fa-solid fa-address-card"></i></div><p class="title">' + (q||activeTag ? '找不到符合的名片' : '尚無名片') + '</p><p>' + (q||activeTag ? '嘗試其他關鍵字或切換標籤' : '點擊「新增名片」開始建立，或使用「掃描」透過相機讀取') + '</p></div>';
                 return;
             }
 
@@ -1708,6 +1915,8 @@
                 const phoneEl = phone ? '<div class="card-meta-item"><i class="fa-solid fa-phone"></i>' + phone + '</div>' : '';
                 const emailEl = email ? '<div class="card-meta-item"><i class="fa-solid fa-envelope"></i>' + email + '</div>' : '';
                 const lineEl = line ? '<div class="card-meta-item"><i class="fa-brands fa-line"></i>' + line + '</div>' : '';
+                const tagsHtml = (c.tags||[]).map(t => '<span class="card-tag">' + escapeHtml(t) + '</span>').join('');
+                const tagsSection = tagsHtml ? '<div class="card-tags">' + tagsHtml + '</div>' : '';
 
                 return '<div class="card-item">' +
                     '<div class="card-avatar" style="background:' + color + '">' + initials + '</div>' +
@@ -1717,6 +1926,7 @@
                             '<span class="card-badge ' + badge + '">' + escapeHtml(c.category || '其他') + '</span>' +
                         '</div>' +
                         '<div class="card-meta">' + titleEl + companyEl + phoneEl + emailEl + lineEl + '</div>' +
+                        tagsSection +
                     '</div>' + thumb +
                     '<div class="card-actions">' +
                         '<button onclick="editCard(\'' + c.id + '\')" title="編輯"><i class="fa-solid fa-pen-to-square"></i></button>' +
@@ -1782,6 +1992,7 @@
                 showToast('名片已新增');
             }
             saveUserCards(cards);
+            renderTagFilterBar();
             renderCards();
             updateStats();
             closeModal();
@@ -1793,6 +2004,7 @@
             if (confirm('確定要刪除這張名片嗎？')) {
                 cards = cards.filter(x => x.id !== id);
                 saveUserCards(cards);
+                renderTagFilterBar();
                 renderCards();
                 updateStats();
                 showToast('名片已刪除');
@@ -1823,6 +2035,35 @@
         function generateVCard(card) {
             return 'BEGIN:VCARD\nVERSION:3.0\nFN:' + (card.name||'') + '\nTITLE:' + (card.title||'') + '\nORG:' + (card.company||'') + '\nTEL:' + (card.phone||'') + '\nEMAIL:' + (card.email||'') + '\nADR:' + (card.address||'') + '\nEND:VCARD';
         }
+        function parseVCard(text) {
+            const card = { name:'', title:'', company:'', phone:'', email:'', address:'' };
+            for (const raw of String(text || '').replace(/\r/g, '').split('\n')) {
+                const line = raw.trim();
+                if (line.startsWith('FN:')) card.name = line.slice(3).trim();
+                else if (line.startsWith('TITLE:')) card.title = line.slice(6).trim();
+                else if (line.startsWith('ORG:')) card.company = line.slice(4).trim();
+                else if (line.startsWith('TEL')) card.phone = line.split(':').slice(1).join(':').trim();
+                else if (line.startsWith('EMAIL')) card.email = line.split(':').slice(1).join(':').trim();
+                else if (line.startsWith('ADR')) card.address = line.split(':').slice(1).join(':').trim();
+            }
+            return card;
+        }
+        function handleVCardImport(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = () => {
+                const imported = parseVCard(reader.result);
+                if (!imported.name) { showToast('vCard 解析失敗'); return; }
+                cards.unshift({ id: Date.now().toString(), ...imported, category: '其他', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
+                saveUserCards(cards);
+                renderCards();
+                updateStats();
+                showToast('已匯入 vCard');
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
         function downloadVCard() {
             if (!currentShareCard) return;
             const blob = new Blob([generateVCard(currentShareCard)], { type: 'text/vcard' });
@@ -1837,6 +2078,17 @@
         function copyVCard() {
             if (!currentShareCard) return;
             navigator.clipboard.writeText(generateVCard(currentShareCard)).then(() => showToast('已複製 vCard'));
+        }
+        function exportWalletPass() {
+            if (!currentShareCard) return;
+            const blob = new Blob([JSON.stringify({ description:'名片王聯絡人', formatVersion:1, organizationName:'名片王', serialNumber: currentShareCard.id, backgroundColor:'#0f2240', foregroundColor:'#ffffff', labelColor:'#ff6b35', contact: currentShareCard }, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = (currentShareCard.name || 'contact') + '.pkpass.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('已輸出 Apple Wallet 資訊');
         }
 
         // Camera / Scan
@@ -1931,6 +2183,187 @@
                 } else { showToast('沒有新名片'); }
             } else { showToast('沒有 Telegram 名片資料'); }
         }
+
+        // ===== TAG SYSTEM =====
+        function renderTagInput() {
+            const wrap = document.getElementById('tagInputWrap');
+            if (!wrap) return;
+            const input = document.getElementById('tagInputField');
+            let html = currentCardTags.map(t =>
+                '<span class="card-tag">' + escapeHtml(t) + '<span class="tag-remove" onclick="event.stopPropagation();removeTag(\'' + escapeHtml(t).replace(/'/g,"\\'") + '\')">×</span></span>'
+            ).join('');
+            wrap.innerHTML = html + '<input type="text" id="tagInputField" placeholder="' + (currentCardTags.length === 0 ? '輸入標籤後按 Enter' : '') + '" style="min-width:140px;" onkeydown="handleTagInputKey(event)" onclick="event.stopPropagation()">';
+        }
+
+        function handleTagInputKey(e) {
+            if (e.key === 'Enter' || e.key === ',' || e.key === '、') {
+                e.preventDefault();
+                const val = e.target.value.trim().replace(/,|、/g, '');
+                if (val && !currentCardTags.includes(val)) {
+                    currentCardTags.push(val);
+                    renderTagInput();
+                }
+                e.target.value = '';
+            } else if (e.key === 'Backspace' && !e.target.value && currentCardTags.length > 0) {
+                currentCardTags.pop();
+                renderTagInput();
+            }
+        }
+
+        function addTagFromSuggestion(tag) {
+            if (!currentCardTags.includes(tag)) {
+                currentCardTags.push(tag);
+                renderTagInput();
+            }
+        }
+
+        function removeTag(tag) {
+            currentCardTags = currentCardTags.filter(t => t !== tag);
+            renderTagInput();
+        }
+
+        // ===== AI ASSISTANT =====
+        function openAIModal() {
+            document.getElementById('aiModal').classList.add('show');
+            document.getElementById('aiQuery').value = '';
+            document.getElementById('aiResults').style.display = 'none';
+            document.getElementById('aiEmptyState').style.display = 'none';
+            setTimeout(() => document.getElementById('aiQuery').focus(), 100);
+        }
+
+        function closeAIModal() {
+            document.getElementById('aiModal').classList.remove('show');
+        }
+
+        function runAISearch() {
+            const q = document.getElementById('aiQuery').value.trim().toLowerCase();
+            if (!q) return;
+            const results = aiSearch(q);
+            const resultsDiv = document.getElementById('aiResults');
+            const emptyDiv = document.getElementById('aiEmptyState');
+            if (results.length === 0) {
+                resultsDiv.style.display = 'none';
+                emptyDiv.style.display = 'block';
+            } else {
+                emptyDiv.style.display = 'none';
+                resultsDiv.style.display = 'block';
+                document.getElementById('aiResultsSummary').innerHTML =
+                    '<span class="ai-results-badge"><i class="fa-solid fa-robot"></i> AI 找到 ' + results.length + ' 張名片</span> 「' + escapeHtml(q) + '」';
+                document.getElementById('aiResultsList').innerHTML = results.map(c => {
+                    const initials = getInitials(c.name);
+                    const color = getAvatarColor(c.name);
+                    const tagsHtml = (c.tags||[]).map(t => '<span class="card-tag">' + escapeHtml(t) + '</span>').join('');
+                    return '<div class="card-item" style="cursor:pointer;" onclick="goToCard(\'' + c.id + '\')">' +
+                        '<div class="card-avatar" style="background:' + color + ';width:38px;height:38px;font-size:12px;">' + initials + '</div>' +
+                        '<div class="card-body">' +
+                            '<div class="card-name-row"><span class="card-name">' + escapeHtml(c.name||'未命名') + '</span></div>' +
+                            '<div class="card-meta">' +
+                                (c.company ? '<div class="card-meta-item"><i class="fa-solid fa-building"></i>' + escapeHtml(c.company) + '</div>' : '') +
+                                (c.title ? '<div class="card-meta-item"><i class="fa-solid fa-briefcase"></i>' + escapeHtml(c.title) + '</div>' : '') +
+                            '</div>' +
+                            (tagsHtml ? '<div class="card-tags">' + tagsHtml + '</div>' : '') +
+                        '</div>' +
+                    '</div>';
+                }).join('');
+            }
+        }
+
+        function goToCard(id) {
+            closeAIModal();
+            setTimeout(() => {
+                const card = cards.find(c => c.id === id);
+                if (card) editCard(card.id);
+            }, 150);
+        }
+
+        // Client-side AI matching using keyword extraction and fuzzy scoring
+        function aiSearch(query) {
+            // Normalize query
+            const q = query.toLowerCase();
+            const tokens = q.split(/[\s,，、。.!]/).filter(t => t.length > 1);
+
+            // Intent detection
+            const isFindPeople = /找|人|同事|聯絡人|誰/.test(q);
+            const isFindCompany = /公司|企業|廠商|供應商/.test(q);
+            const isFindCategory = /客戶|業務|主管|經理|老闆|採購/.test(q);
+            const hasLine = /line|社群|社交/.test(q);
+            const hasEmail = /email|mail|郵箱/.test(q);
+            const hasPhone = /電話|手機|號碼/.test(q);
+
+            return cards.filter(c => {
+                let score = 0;
+                const name = (c.name||'').toLowerCase();
+                const company = (c.company||'').toLowerCase();
+                const title = (c.title||'').toLowerCase();
+                const email = (c.email||'').toLowerCase();
+                const phone = (c.phone||'').toLowerCase();
+                const line = (c.line||'').toLowerCase();
+                const category = (c.category||'').toLowerCase();
+                const tags = (c.tags||[]).map(t => t.toLowerCase());
+                const allText = name + ' ' + company + ' ' + title + ' ' + email + ' ' + category + ' ' + tags.join(' ');
+
+                // Department/title keywords
+                if (isFindPeople) {
+                    if (tokens.some(t => name.includes(t) || title.includes(t) || tags.some(tag => tag.includes(t)))) score += 3;
+                    if (/業務|業務部|sales/.test(q) && /業務|sales/.test(title + tags.join(' '))) score += 5;
+                    if (/主管|經理|總/.test(q) && /主管|經理|總/.test(title)) score += 5;
+                    if (/研發|工程|技術/.test(q) && /研發|工程|技術|rd|engineer/.test(title + tags.join(' '))) score += 5;
+                    if (/老闆|創辦人|ceo/.test(q) && /老闆|創辦人|ceo|董事長|總經理/.test(title)) score += 5;
+                }
+
+                // Company type keywords
+                if (isFindCompany) {
+                    if (tokens.some(t => company.includes(t) || tags.some(tag => tag.includes(t)))) score += 4;
+                    if (/科技|tech/.test(q) && /科技|tech|software|軟體/.test(company + tags.join(' '))) score += 5;
+                    if (/製造|工廠|production/.test(q) && /製造|工廠|production/.test(company + tags.join(' '))) score += 5;
+                    if (/供應商|vendor|廠商/.test(q) && (tags.some(t => /供應商|vendor|廠商/.test(t)) || /供應商|vendor|廠商/.test(category))) score += 5;
+                }
+
+                // Specific attribute searches
+                if (hasLine && line && line.length > 0) score += 4;
+                if (hasEmail && email.includes('@')) score += 4;
+                if (hasPhone && phone) score += 3;
+
+                // Direct token matches
+                tokens.forEach(t => {
+                    if (name.includes(t)) score += 2;
+                    if (company.includes(t)) score += 2;
+                    if (title.includes(t)) score += 2;
+                    if (tags.some(tag => tag.includes(t))) score += 3;
+                    if (email.includes(t)) score += 1;
+                });
+
+                // Category filter
+                if (isFindCategory) {
+                    if (/客戶|customer|客人/.test(q) && category === '客戶') score += 4;
+                    if (/供應商|廠商|vendor/.test(q) && (category === '供應商' || tags.some(t => /供應商|vendor|廠商/.test(t)))) score += 4;
+                    if (/同事|colleague/.test(q) && category === '同事') score += 4;
+                }
+
+                return score > 0;
+            }).sort((a, b) => {
+                const scoreA = calcScore(a, q, tokens);
+                const scoreB = calcScore(b, q, tokens);
+                return scoreB - scoreA;
+            }).slice(0, 10);
+        }
+
+        function calcScore(c, q, tokens) {
+            let score = 0;
+            const name = (c.name||'').toLowerCase();
+            const company = (c.company||'').toLowerCase();
+            const title = (c.title||'').toLowerCase();
+            const tags = (c.tags||[]).map(t => t.toLowerCase());
+            const allText = name + ' ' + company + ' ' + title + ' ' + tags.join(' ');
+            tokens.forEach(t => {
+                if (name.includes(t)) score += 2;
+                if (company.includes(t)) score += 2;
+                if (title.includes(t)) score += 2;
+                if (tags.some(tag => tag.includes(t))) score += 3;
+            });
+            return score;
+        }
+
 
         // Image compression
         async function compressImage(file, maxWidth = 800, quality = 0.7) {
