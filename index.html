@@ -2129,16 +2129,38 @@
         function parseCardInfo(text) {
             const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
             let name = '', title = '', company = '', phone = '', email = '', address = '';
-            const phoneRegex = /(\+?886|0)[-\s]?[0-9]{1,4}[-\s]?[0-9]{3,4}[-\s]?[0-9]{3,4}/;
+            const phoneRegex = /(\+?886|0)[-\s]?[0-9]{1,4}[-\s]?[0-9]{3,4}[-\s]?[0-9]{3,4}(?:[#分機]\d+)?/;
             const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/;
+            // Chinese job title keywords
+            const titleKeywords = ['總', '經', '董', '副', '協', '理', '長', '總', '副總', '主任', '組長', '主管', '總監', '協理', '特助', '助', '襄理', '處', '局', '所長', '院士', '博士', '老師', '老闆', 'ceo', 'coo', 'cfo', 'cto', 'vp', 'director', 'manager'];
+            // Chinese company suffixes
+            const companySuffixes = ['公司', '企業', '有限', '股份', '集團', '商行', '工作室', '事務所', '醫院', '診所', '銀行', '學院', '大學', '學校', '基金會', '協會', '會', '社', '行', '號'];
+            const nameCandidates = [];
+            const titleCandidates = [];
+            const companyCandidates = [];
+
             lines.forEach(l => {
-                if (phoneRegex.test(l) && !phone) phone = l.match(phoneRegex)[0];
-                else if (emailRegex.test(l) && !email) email = l.match(emailRegex)[0];
-                else if (!name) name = l;
-                else if (!title) title = l;
-                else if (!company) company = l;
-                else address += l + ' ';
+                const lower = l.toLowerCase();
+                // Phone
+                if (phoneRegex.test(l) && !phone) { phone = l.match(phoneRegex)[0]; }
+                // Email
+                else if (emailRegex.test(l) && !email) { email = l.match(emailRegex)[0]; }
+                // Job title detection
+                else if (titleKeywords.some(k => lower.includes(k)) && !title) { titleCandidates.push(l); }
+                // Company detection
+                else if (companySuffixes.some(s => lower.includes(s)) && !company) { companyCandidates.push(l); }
+                // Name detection: 2-4 Chinese chars, or single short English string
+                else if (/^[\u4e00-\u9fa5]{2,4}$/.test(l) || /^[a-zA-Z]{2,5}( [a-zA-Z]{2,5})*$/.test(l)) {
+                    nameCandidates.push(l);
+                }
             });
+
+            name = nameCandidates[0] || nameCandidates[1] || lines[0] || '';
+            title = titleCandidates[0] || '';
+            company = companyCandidates[0] || '';
+            // Remaining lines → address
+            const used = new Set([name, title, company, phone, email].filter(Boolean));
+            address = lines.filter(l => !used.has(l) && l !== name && l !== title && l !== company).join(' ');
             document.getElementById('inputName').value = name;
             document.getElementById('inputTitle').value = title;
             document.getElementById('inputCompany').value = company;
